@@ -5,7 +5,7 @@ import torch.utils.data as data
 
 from PIL import Image
 from torchvision import transforms
-from .util.mask import (bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
+from .util.mask import (bottom_mask, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
