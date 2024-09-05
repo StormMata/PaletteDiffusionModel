@@ -32,7 +32,7 @@ def main_worker(gpu, ngpus_per_node, opt):
     # set seed and and cuDNN environment
     print('Setting seed and cuDNN environment...')
     torch.backends.cudnn.enabled = True
-    warnings.warn('You have chosen to use cudnn for accleration. torch.backends.cudnn.enabled=True')
+    warnings.warn('You have chosen to use cuDNN for acceleration. torch.backends.cudnn.enabled=True')
     Util.set_seed(opt['seed'])
 
     # set logger

@@ -1,9 +1,9 @@
-from abc import abstractmethod
 import math
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+from abc import abstractmethod
 
 from .nn import (
     checkpoint,
@@ -60,7 +60,7 @@ class Upsample(nn.Module):
 
     def forward(self, x):
         assert x.shape[1] == self.channels
-        x = F.interpolate(x, scale_factor=2, mode="nearest")
+        x = F.interpolate(x, scale_factor=(2,1), mode="nearest")
         if self.use_conv:
             x = self.conv(x)
         return x
@@ -77,7 +77,7 @@ class Downsample(nn.Module):
         self.channels = channels
         self.out_channel = out_channel or channels
         self.use_conv = use_conv
-        stride = 2
+        stride = (2,1)
         if use_conv:
             self.op = nn.Conv2d(
                 self.channels, self.out_channel, 3, stride=stride, padding=1
@@ -89,7 +89,6 @@ class Downsample(nn.Module):
     def forward(self, x):
         assert x.shape[1] == self.channels
         return self.op(x)
-
 
 class ResBlock(EmbedBlock):
     """
@@ -249,7 +248,6 @@ class AttentionBlock(nn.Module):
         h = self.proj_out(h)
         return (x + h).reshape(b, c, *spatial)
 
-
 class QKVAttentionLegacy(nn.Module):
     """
     A module which performs QKV attention. Matches legacy QKVAttention + input/ouput heads shaping
@@ -280,7 +278,6 @@ class QKVAttentionLegacy(nn.Module):
     @staticmethod
     def count_flops(model, _x, y):
         return count_flops_attn(model, _x, y)
-
 
 class QKVAttention(nn.Module):
     """

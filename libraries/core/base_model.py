@@ -117,6 +117,7 @@ class BaseModel():
             return
 
         self.logger.info('Loading pretrained model from [{:s}] ...'.format(model_path))
+        print(f"Loading pretrained model from {model_path}")
         if isinstance(network, nn.DataParallel) or isinstance(network, nn.parallel.DistributedDataParallel):
             network = network.module
         network.load_state_dict(torch.load(model_path, map_location = lambda storage, loc: Util.set_device(storage)), strict=strict)

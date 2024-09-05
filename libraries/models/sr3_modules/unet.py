@@ -103,7 +103,6 @@ class UNet(nn.Module):
 
         return self.final_conv(x)
 
-
 # PositionalEncoding Source： https://github.com/lmnt-com/wavegrad/blob/master/src/wavegrad/model.py
 class PositionalEncoding(nn.Module):
     def __init__(self, dim):
@@ -116,7 +115,6 @@ class PositionalEncoding(nn.Module):
         encoding = noise_level.unsqueeze(1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
         encoding = torch.cat([torch.sin(encoding), torch.cos(encoding)], dim=-1)
         return encoding
-
 
 class FeatureWiseAffine(nn.Module):
     def __init__(self, in_channels, out_channels, use_affine_level=False):
@@ -135,11 +133,9 @@ class FeatureWiseAffine(nn.Module):
             x = x + self.noise_func(noise_embed).view(batch, -1, 1, 1)
         return x
 
-
 class Swish(nn.Module):
     def forward(self, x):
         return x * torch.sigmoid(x)
-
 
 class Upsample(nn.Module):
     def __init__(self, dim):
@@ -150,7 +146,6 @@ class Upsample(nn.Module):
     def forward(self, x):
         return self.conv(self.up(x))
 
-
 class Downsample(nn.Module):
     def __init__(self, dim):
         super().__init__()
@@ -159,9 +154,7 @@ class Downsample(nn.Module):
     def forward(self, x):
         return self.conv(x)
 
-
 # building block modules
-
 
 class Block(nn.Module):
     def __init__(self, dim, dim_out, groups=32, dropout=0):
@@ -175,7 +168,6 @@ class Block(nn.Module):
 
     def forward(self, x):
         return self.block(x)
-
 
 class ResnetBlock(nn.Module):
     def __init__(self, dim, dim_out, noise_level_emb_dim=None, dropout=0, use_affine_level=False, norm_groups=32):
@@ -193,7 +185,6 @@ class ResnetBlock(nn.Module):
         h = self.noise_func(h, time_emb)
         h = self.block2(h)
         return h + self.res_conv(x)
-
 
 class SelfAttention(nn.Module):
     def __init__(self, in_channel, n_head=1, norm_groups=32):
@@ -224,7 +215,6 @@ class SelfAttention(nn.Module):
 
         return out + input
 
-
 class ResnetBlocWithAttn(nn.Module):
     def __init__(self, dim, dim_out, *, noise_level_emb_dim=None, norm_groups=32, dropout=0, with_attn=False):
         super().__init__()
@@ -240,10 +230,8 @@ class ResnetBlocWithAttn(nn.Module):
             x = self.attn(x)
         return x
 
-
 def exists(x):
     return x is not None
-
 
 def default(val, d):
     if exists(val):

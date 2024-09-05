@@ -1,11 +1,13 @@
 import os
-from PIL import Image
-import importlib
-from datetime import datetime
 import logging
+import importlib
+import numpy as np
 import pandas as pd
-
 import core.util as Util
+import matplotlib.pyplot as plt
+
+from PIL import Image
+from datetime import datetime
 
 class InfoLogger():
     """
@@ -98,7 +100,31 @@ class VisualWriter():
         self.epoch = epoch
         self.iter = iter
 
-    def save_images(self, results):
+    def save_numpy_images(self, output, name, result_path, varnum=0, figsize=(12,4), dpi=100):
+        '''
+        Save an imshow plot of a 2D slice of data
+
+        NOTE: I'm hardcoding some stuff for the (600,20) lidar data
+        '''
+        fig, ax = plt.subplots(1, 1, figsize=figsize, dpi=dpi)
+
+        fname = os.path.join(result_path, name)
+        fname = fname[:-4]  # Workaround for weird field extension naming
+
+        if len(output.shape) == 3:
+            ax.imshow(output[varnum,:120,:].T,
+                        vmin=-0.75,
+                        vmax=0.75)
+        elif len(output.shape) == 4:  # For the "Process" variable
+            # for i in range(output.shape[0]):
+                ax.imshow(output[0,varnum,:120,:].T,  # Values beyond 0 appear empty
+                            vmin=-1,
+                            vmax=1)
+        ax.set_title(name)
+        plt.savefig(fname+'.png', bbox_inches='tight', format='png')
+        plt.close()
+
+    def save_images(self, results, datatype):
         result_path = os.path.join(self.result_dir, self.phase)
         os.makedirs(result_path, exist_ok=True)
         result_path = os.path.join(result_path, str(self.epoch))
@@ -107,9 +133,14 @@ class VisualWriter():
         ''' get names and corresponding images from results[OrderedDict] '''
         try:
             names = results['name']
-            outputs = Util.postprocess(results['result'])
-            for i in range(len(names)): 
-                Image.fromarray(outputs[i]).save(os.path.join(result_path, names[i]))
+            if datatype == 'image':
+                outputs = Util.postprocess(results['result'])
+                for i in range(len(names)): 
+                    Image.fromarray(outputs[i]).save(os.path.join(result_path, names[i]))
+            elif datatype == '2d_numpy':
+                for i in range(len(names)):
+                    np.save(os.path.join(result_path, names[i]), results['result'][i])
+                    self.save_numpy_images(results['result'][i], names[i], result_path)
         except:
             raise NotImplementedError('You must specify the context of name and result in save_current_results functions of model.')
 

@@ -1,13 +1,11 @@
-from functools import partial
 import numpy as np
+import core.util as Util
 
-from torch.utils.data.distributed import DistributedSampler
+from functools import partial
+from core.praser import init_obj
 from torch import Generator, randperm
 from torch.utils.data import DataLoader, Subset
-
-import core.util as Util
-from core.praser import init_obj
-
+from torch.utils.data.distributed import DistributedSampler
 
 def define_dataloader(logger, opt):
     """ create train/test dataloader and validation dataloader,  validation dataloader is None when phase is test or not GPU 0 """

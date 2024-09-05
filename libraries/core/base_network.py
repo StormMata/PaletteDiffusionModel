@@ -1,4 +1,5 @@
 import torch.nn as nn
+
 class BaseNetwork(nn.Module):
   def __init__(self, init_type='kaiming', gain=0.02):
     super(BaseNetwork, self).__init__()
@@ -42,7 +43,3 @@ class BaseNetwork(nn.Module):
     for m in self.children():
       if hasattr(m, 'init_weights'):
         m.init_weights(self.init_type, self.gain)
-
-
-
-    

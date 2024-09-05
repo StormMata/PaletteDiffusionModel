@@ -1,10 +1,12 @@
 import math
 import torch
-from inspect import isfunction
-from functools import partial
 import numpy as np
+
 from tqdm import tqdm
+from functools import partial
+from inspect import isfunction
 from core.base_network import BaseNetwork
+
 class Network(BaseNetwork):
     def __init__(self, unet, beta_schedule, module_name='sr3', **kwargs):
         super(Network, self).__init__(**kwargs)
@@ -12,6 +14,8 @@ class Network(BaseNetwork):
             from .sr3_modules.unet import UNet
         elif module_name == 'guided_diffusion':
             from .guided_diffusion_modules.unet import UNet
+        elif module_name == 'hardcoded_diffusion':
+            from .hardcoded_diffusion_modules.unet import UNet
         
         self.denoise_fn = UNet(**unet)
         self.beta_schedule = beta_schedule
@@ -123,7 +127,6 @@ class Network(BaseNetwork):
             loss = self.loss_fn(noise, noise_hat)
         return loss
 
-
 # gaussian diffusion trainer class
 def exists(x):
     return x is not None
@@ -177,5 +180,3 @@ def make_beta_schedule(schedule, n_timestep, linear_start=1e-6, linear_end=1e-2,
     else:
         raise NotImplementedError(schedule)
     return betas
-
-

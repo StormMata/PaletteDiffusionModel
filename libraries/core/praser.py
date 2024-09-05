@@ -1,12 +1,14 @@
 import os
-from collections import OrderedDict
 import json
+import shutil
+import importlib
+
 from pathlib import Path
 from datetime import datetime
 from functools import partial
-import importlib
 from types  import FunctionType
-import shutil
+from collections import OrderedDict
+
 def init_obj(opt, logger, *args, default_file_name='default file', given_module=None, init_type='Network', **modify_kwargs):
     """
     finds a function handle with the name given as 'name' in config,
@@ -141,15 +143,10 @@ def parse(args):
     if 'debug' in opt['name']:
         opt['train'].update(opt['debug'])
 
-    ''' code backup ''' 
-    for name in os.listdir('.'):
-        if name in ['config', 'models', 'core', 'slurm', 'data']:
-            shutil.copytree(name, os.path.join(opt['path']['code'], name), ignore=shutil.ignore_patterns("*.pyc", "__pycache__"))
-        if '.py' in name or '.sh' in name:
-            shutil.copy(name, opt['path']['code'])
+    # ''' code backup ''' 
+    # for name in os.listdir('.'):
+    #     if name in ['config', 'models', 'core', 'slurm', 'data']:
+    #         shutil.copytree(name, os.path.join(opt['path']['code'], name), ignore=shutil.ignore_patterns("*.pyc", "__pycache__"))
+    #     if '.py' in name or '.sh' in name:
+    #         shutil.copy(name, opt['path']['code'])
     return dict_to_nonedict(opt)
-
-
-
-
-

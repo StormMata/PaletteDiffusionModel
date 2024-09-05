@@ -1,13 +1,12 @@
 import torch
-from torch import nn
-from torch.autograd import Variable
-from torch.nn import functional as F
+import numpy as np
 import torch.utils.data
 
-from torchvision.models.inception import inception_v3
-
-import numpy as np
+from torch import nn
 from scipy.stats import entropy
+from torch.autograd import Variable
+from torch.nn import functional as F
+from torchvision.models.inception import inception_v3
 
 def mae(input, target):
     with torch.no_grad():
@@ -15,6 +14,12 @@ def mae(input, target):
         output = loss(input, target)
     return output
 
+def mse(input, target):
+    '''
+    Added by Alex
+    '''
+    with torch.no_grad():
+        return F.mse_loss(input, target)
 
 def inception_score(imgs, cuda=True, batch_size=32, resize=False, splits=1):
     """Computes the inception score of the generated images imgs

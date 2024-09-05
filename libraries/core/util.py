@@ -1,9 +1,10 @@
-import random
-import numpy as np
 import math
 import torch
-from torch.nn.parallel import DistributedDataParallel as DDP
+import random
+import numpy as np
+
 from torchvision.utils import make_grid
+from torch.nn.parallel import DistributedDataParallel as DDP
 
 
 def tensor2img(tensor, out_type=np.uint8, min_max=(-1, 1)):
@@ -12,7 +13,7 @@ def tensor2img(tensor, out_type=np.uint8, min_max=(-1, 1)):
     Input: 4D(B,(3/1),H,W), 3D(C,H,W), or 2D(H,W), any range, RGB channel order
     Output: 3D(H,W,C) or 2D(H,W), [0,255], np.uint8 (default)
     '''
-    tensor = tensor.clamp_(*min_max)  # clamp
+    tensor = tensor.squeeze().clamp_(*min_max)  # clamp
     n_dim = tensor.dim()
     if n_dim == 4:
         n_img = len(tensor)
@@ -28,7 +29,7 @@ def tensor2img(tensor, out_type=np.uint8, min_max=(-1, 1)):
     if out_type == np.uint8:
         img_np = ((img_np+1) * 127.5).round()
         # Important. Unlike matlab, numpy.unit8() WILL NOT round by default.
-    return img_np.astype(out_type).squeeze()
+    return img_np.astype(out_type)
 
 def postprocess(images):
 	return [tensor2img(image) for image in images]
@@ -71,6 +72,3 @@ def set_device(args, distributed=False, rank=0):
 		else:
 			args = set_gpu(args, distributed, rank)
 	return args
-
-
-

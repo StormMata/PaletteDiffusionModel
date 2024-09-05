@@ -16,4 +16,4 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 export MPICH_GPU_SUPPORT_ENABLED=1
 OMPI_MCA_opal_cuda_support=true
 
-conda run --no-capture-output  -n diffusion python3 run.py -c config/settings.json -gpu 0,1,2,3 -b 32
+conda run --no-capture-output  -n diffusion python3 run.py -c config/mask_test.json -gpu 0,1,2,3 -b 32

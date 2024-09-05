@@ -1,23 +1,53 @@
 # Copyright (c) OpenMMLab. All rights reserved.
 import math
 
-import cv2
+# import cv2
 import numpy as np
 from PIL import Image, ImageDraw
 
+def bottom_mask(img_shape=(96, 200), mask_size=(96, 50)):
+    """Create a mask of specified size positioned at the bottom of the image.
 
-def random_cropping_bbox(img_shape=(256,256), mask_mode='onedirection'):
+    Args:
+        img_shape (tuple[int]): The size of an image, in the form of (h, w).
+        mask_size (tuple[int]): The size of the mask, in the form of (h, w).
+
+    Returns:
+        numpy.ndarray: The generated mask array with shape (h, w, 1).
+    """
+    img_h = 96
+    img_w = 200 
+    mask_h = 96
+    mask_w = 200
+
+    if mask_h > img_h or mask_w > img_w:
+        raise ValueError(f'Mask size {mask_size} should be smaller than or equal to '
+                         f'image size {img_shape}')
+    
+    # Initialize a mask with zeros
+    mask = np.zeros((img_h, img_w, 1), dtype=np.uint8)
+    
+    # Define the top-left corner of the mask
+    top = img_h - mask_h  # Position the mask at the bottom
+    left = (img_w - mask_w) // 2  # Center the mask horizontally
+    
+    # Set the mask area to 1
+    mask[top:top + mask_h, left:left + mask_w, 0] = 1
+    
+    return mask
+
+def random_cropping_bbox(img_shape = (256, 256), mask_mode = 'onedirection'):
     h, w = img_shape
     if mask_mode == 'onedirection':
         _type = np.random.randint(0, 4)
         if _type == 0:
-            top, left, height, width = 0, 0, h, w//2
+            top, left, height, width =    0,    0,    h, w//2
         elif _type == 1:
-            top, left, height, width = 0, 0, h//2, w
+            top, left, height, width =    0,    0, h//2,    w
         elif _type == 2:
-            top, left, height, width = h//2, 0, h//2, w
+            top, left, height, width = h//2,    0, h//2,    w
         elif _type == 3:
-            top, left, height, width = 0, w//2, h, w//2
+            top, left, height, width =    0, w//2,    h, w//2
     else:
         target_area = (h*w)//2
         width = np.random.randint(target_area//h, w)
@@ -32,7 +62,7 @@ def random_cropping_bbox(img_shape=(256,256), mask_mode='onedirection'):
             left = np.random.randint(0, w-width)
     return (top, left, height, width)
 
-def random_bbox(img_shape=(256,256), max_bbox_shape=(128, 128), max_bbox_delta=40, min_margin=20):
+def random_bbox(img_shape = (96, 200), max_bbox_shape = (96, 200), max_bbox_delta = 40, min_margin = 0):
     """Generate a random bbox for the mask on a given image.
 
     In our implementation, the max value cannot be obtained since we use
@@ -65,9 +95,9 @@ def random_bbox(img_shape=(256,256), max_bbox_shape=(128, 128), max_bbox_delta=4
         min_margin = (min_margin, min_margin)
         
     img_h, img_w = img_shape[:2]
-    max_mask_h, max_mask_w = max_bbox_shape
-    max_delta_h, max_delta_w = max_bbox_delta
-    margin_h, margin_w = min_margin
+    max_mask_h,  max_mask_w   = max_bbox_shape
+    max_delta_h, max_delta_w  = max_bbox_delta
+    margin_h,    margin_w     = min_margin
 
     if max_mask_h > img_h or max_mask_w > img_w:
         raise ValueError(f'mask shape {max_bbox_shape} should be smaller than '
@@ -81,21 +111,26 @@ def random_bbox(img_shape=(256,256), max_bbox_shape=(128, 128), max_bbox_delta=4
                          f'shape {img_shape} and mask shape {max_bbox_shape}')
 
     # get the max value of (top, left)
-    max_top = img_h - margin_h - max_mask_h
+    max_top  = img_h - margin_h - max_mask_h
     max_left = img_w - margin_w - max_mask_w
     # randomly select a (top, left)
-    top = np.random.randint(margin_h, max_top)
+    top  = np.random.randint(margin_h, max_top)
     left = np.random.randint(margin_w, max_left)
     # randomly shrink the shape of mask box according to `max_bbox_delta`
     # the center of box is fixed
-    delta_top = np.random.randint(0, max_delta_h // 2 + 1)
+    delta_top  = np.random.randint(0, max_delta_h // 2 + 1)
     delta_left = np.random.randint(0, max_delta_w // 2 + 1)
     top = top + delta_top
     left = left + delta_left
     h = max_mask_h - delta_top
     w = max_mask_w - delta_left
-    return (top, left, h, w)
+    # return (top, left, h, w)
 
+    # Create an array with zeros and set the inside of the bounding box to 1
+    mask = np.zeros((img_h, img_w, 1), dtype=np.uint8)
+    mask[top:top + h, left:left + w, 0] = 1
+    
+    return mask
 
 def bbox2mask(img_shape, bbox, dtype='uint8'):
     """Generate mask in ndarray from bbox.
@@ -122,14 +157,13 @@ def bbox2mask(img_shape, bbox, dtype='uint8'):
 
     return mask
 
-
 def brush_stroke_mask(img_shape,
-                      num_vertices=(4, 12),
-                      mean_angle=2 * math.pi / 5,
-                      angle_range=2 * math.pi / 15,
-                      brush_width=(12, 40),
-                      max_loops=4,
-                      dtype='uint8'):
+                      num_vertices = (4, 12),
+                      mean_angle   = 2 * math.pi / 5,
+                      angle_range  = 2 * math.pi / 15,
+                      brush_width  = (12, 40),
+                      max_loops    = 4,
+                      dtype        = 'uint8'):
     """Generate free-form mask.
 
     The method of generating free-form mask is in the following paper:
@@ -229,91 +263,91 @@ def brush_stroke_mask(img_shape,
     return mask
 
 
-def random_irregular_mask(img_shape,
-                          num_vertices=(4, 8),
-                          max_angle=4,
-                          length_range=(10, 100),
-                          brush_width=(10, 40),
-                          dtype='uint8'):
-    """Generate random irregular masks.
+# def random_irregular_mask(img_shape,
+#                           num_vertices=(4, 8),
+#                           max_angle=4,
+#                           length_range=(10, 100),
+#                           brush_width=(10, 40),
+#                           dtype='uint8'):
+#     """Generate random irregular masks.
 
-    This is a modified version of free-form mask implemented in
-    'brush_stroke_mask'.
+#     This is a modified version of free-form mask implemented in
+#     'brush_stroke_mask'.
 
-    We prefer to use `uint8` as the data type of masks, which may be different
-    from other codes in the community.
+#     We prefer to use `uint8` as the data type of masks, which may be different
+#     from other codes in the community.
 
-    TODO: Rewrite the implementation of this function.
+#     TODO: Rewrite the implementation of this function.
 
-    Args:
-        img_shape (tuple[int]): Size of the image.
-        num_vertices (int | tuple[int]): Min and max number of vertices. If
-            only give an integer, we will fix the number of vertices.
-            Default: (4, 8).
-        max_angle (float): Max value of angle at each vertex. Default 4.0.
-        length_range (int | tuple[int]): (min_length, max_length). If only give
-            an integer, we will fix the length of brush. Default: (10, 100).
-        brush_width (int | tuple[int]): (min_width, max_width). If only give
-            an integer, we will fix the width of brush. Default: (10, 40).
-        dtype (str): Indicate the data type of returned masks. Default: 'uint8'
+#     Args:
+#         img_shape (tuple[int]): Size of the image.
+#         num_vertices (int | tuple[int]): Min and max number of vertices. If
+#             only give an integer, we will fix the number of vertices.
+#             Default: (4, 8).
+#         max_angle (float): Max value of angle at each vertex. Default 4.0.
+#         length_range (int | tuple[int]): (min_length, max_length). If only give
+#             an integer, we will fix the length of brush. Default: (10, 100).
+#         brush_width (int | tuple[int]): (min_width, max_width). If only give
+#             an integer, we will fix the width of brush. Default: (10, 40).
+#         dtype (str): Indicate the data type of returned masks. Default: 'uint8'
 
-    Returns:
-        numpy.ndarray: Mask in the shape of (h, w, 1).
-    """
+#     Returns:
+#         numpy.ndarray: Mask in the shape of (h, w, 1).
+#     """
 
-    h, w = img_shape[:2]
+#     h, w = img_shape[:2]
 
-    mask = np.zeros((h, w), dtype=dtype)
-    if isinstance(length_range, int):
-        min_length, max_length = length_range, length_range + 1
-    elif isinstance(length_range, tuple):
-        min_length, max_length = length_range
-    else:
-        raise TypeError('The type of length_range should be int'
-                        f'or tuple[int], but got type: {length_range}')
-    if isinstance(num_vertices, int):
-        min_num_vertices, max_num_vertices = num_vertices, num_vertices + 1
-    elif isinstance(num_vertices, tuple):
-        min_num_vertices, max_num_vertices = num_vertices
-    else:
-        raise TypeError('The type of num_vertices should be int'
-                        f'or tuple[int], but got type: {num_vertices}')
+#     mask = np.zeros((h, w), dtype=dtype)
+#     if isinstance(length_range, int):
+#         min_length, max_length = length_range, length_range + 1
+#     elif isinstance(length_range, tuple):
+#         min_length, max_length = length_range
+#     else:
+#         raise TypeError('The type of length_range should be int'
+#                         f'or tuple[int], but got type: {length_range}')
+#     if isinstance(num_vertices, int):
+#         min_num_vertices, max_num_vertices = num_vertices, num_vertices + 1
+#     elif isinstance(num_vertices, tuple):
+#         min_num_vertices, max_num_vertices = num_vertices
+#     else:
+#         raise TypeError('The type of num_vertices should be int'
+#                         f'or tuple[int], but got type: {num_vertices}')
 
-    if isinstance(brush_width, int):
-        min_brush_width, max_brush_width = brush_width, brush_width + 1
-    elif isinstance(brush_width, tuple):
-        min_brush_width, max_brush_width = brush_width
-    else:
-        raise TypeError('The type of brush_width should be int'
-                        f'or tuple[int], but got type: {brush_width}')
+#     if isinstance(brush_width, int):
+#         min_brush_width, max_brush_width = brush_width, brush_width + 1
+#     elif isinstance(brush_width, tuple):
+#         min_brush_width, max_brush_width = brush_width
+#     else:
+#         raise TypeError('The type of brush_width should be int'
+#                         f'or tuple[int], but got type: {brush_width}')
 
-    num_v = np.random.randint(min_num_vertices, max_num_vertices)
+#     num_v = np.random.randint(min_num_vertices, max_num_vertices)
 
-    for i in range(num_v):
-        start_x = np.random.randint(w)
-        start_y = np.random.randint(h)
-        # from the start point, randomly setlect n \in [1, 6] directions.
-        direction_num = np.random.randint(1, 6)
-        angle_list = np.random.randint(0, max_angle, size=direction_num)
-        length_list = np.random.randint(
-            min_length, max_length, size=direction_num)
-        brush_width_list = np.random.randint(
-            min_brush_width, max_brush_width, size=direction_num)
-        for direct_n in range(direction_num):
-            angle = 0.01 + angle_list[direct_n]
-            if i % 2 == 0:
-                angle = 2 * math.pi - angle
-            length = length_list[direct_n]
-            brush_w = brush_width_list[direct_n]
-            # compute end point according to the random angle
-            end_x = (start_x + length * np.sin(angle)).astype(np.int32)
-            end_y = (start_y + length * np.cos(angle)).astype(np.int32)
+#     for i in range(num_v):
+#         start_x = np.random.randint(w)
+#         start_y = np.random.randint(h)
+#         # from the start point, randomly setlect n \in [1, 6] directions.
+#         direction_num = np.random.randint(1, 6)
+#         angle_list = np.random.randint(0, max_angle, size=direction_num)
+#         length_list = np.random.randint(
+#             min_length, max_length, size=direction_num)
+#         brush_width_list = np.random.randint(
+#             min_brush_width, max_brush_width, size=direction_num)
+#         for direct_n in range(direction_num):
+#             angle = 0.01 + angle_list[direct_n]
+#             if i % 2 == 0:
+#                 angle = 2 * math.pi - angle
+#             length = length_list[direct_n]
+#             brush_w = brush_width_list[direct_n]
+#             # compute end point according to the random angle
+#             end_x = (start_x + length * np.sin(angle)).astype(np.int32)
+#             end_y = (start_y + length * np.cos(angle)).astype(np.int32)
 
-            cv2.line(mask, (start_y, start_x), (end_y, end_x), 1, brush_w)
-            start_x, start_y = end_x, end_y
-    mask = np.expand_dims(mask, axis=2)
+#             cv2.line(mask, (start_y, start_x), (end_y, end_x), 1, brush_w)
+#             start_x, start_y = end_x, end_y
+#     mask = np.expand_dims(mask, axis=2)
 
-    return mask
+#     return mask
 
 
 def get_irregular_mask(img_shape, area_ratio_range=(0.15, 0.5), **kwargs):
@@ -334,5 +368,25 @@ def get_irregular_mask(img_shape, area_ratio_range=(0.15, 0.5), **kwargs):
     while not min_ratio < (np.sum(mask) /
                            (img_shape[0] * img_shape[1])) < max_ratio:
         mask = random_irregular_mask(img_shape, **kwargs)
+
+    return mask
+
+def get_custom_mask(img_shape, mask_dir, dtype='uint8'):
+    '''
+    Return a mask based on a user-specified numpy array
+    '''
+
+    ## Read the mask file
+    mask = np.load(mask_dir)
+    mask = mask.astype(dtype)
+
+    ## Check that the mask dimensions are correct 
+    height, width = img_shape[:2]
+    assert mask.shape[0] == height
+    assert mask.shape[1] == width
+
+    if len(img_shape) == 3:  # Volume data
+        depth = img_shape[2]
+        assert mask.shape[2] == depth
 
     return mask
