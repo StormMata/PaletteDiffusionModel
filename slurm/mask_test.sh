@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J mask_test               # job name
 #SBATCH --nodes=1                  #
-#SBATCH --time=1-00:00:00          # set time limit
+#SBATCH --time=2-00:00:00          # set time limit
 #SBATCH --partition=gpu-h100       # GPU partition
 #SBATCH --account=awaken           # allocation
 #SBATCH --ntasks-per-node=4

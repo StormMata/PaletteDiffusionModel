@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0,'/scratch/smata/mask_diffusion/libraries/')
+sys.path.insert(0,'/scratch/smata/PaletteDiffusionModel/libraries/')
 import wandb
 import torch
 import argparse
@@ -102,7 +102,7 @@ def main_worker(gpu, ngpus_per_node, opt):
 if __name__ == '__main__':
     print('Starting...')
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c',   '--config',  type = str, default = '/scratch/smata/mask_diffusion/config/settings.json', help = 'JSON file for configuration')
+    parser.add_argument('-c',   '--config',  type = str, default = '/scratch/smata/PaletteDiffusionModel/config/mask_test.json', help = 'JSON file for configuration')
     parser.add_argument('-p',   '--phase',   type = str, choices = ['train','test'], help = 'Run train or test', default = 'train')
     parser.add_argument('-b',   '--batch',   type = int, default = None, help = 'Batch size in every gpu')
     parser.add_argument('-gpu', '--gpu_ids', type = str, default = None)
