@@ -1,6 +1,6 @@
 {
     "name":          "01",                                             // Experiment name
-    "wandb_project": "mask_test",                                      // Weights and Biases experiment name (why is this different)
+    "wandb_project": "colorization_test",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
                       2,
