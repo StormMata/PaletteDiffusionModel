@@ -1,7 +1,9 @@
 # myself
 experiments/*
+wandb/
 datasets/*
 !experiments/clean.sh
+train*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
