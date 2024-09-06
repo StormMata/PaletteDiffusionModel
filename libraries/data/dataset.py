@@ -491,7 +491,7 @@ class LidarImg2ImgDataset(data.Dataset):
         return len(self.imgs)
 
     def get_mask(self):
-        if self.mask_mode == 'bbox':
+        if self.mask_mode == 'bottom':
             mask = bottom_mask(self.image_size)
         return torch.from_numpy(mask).permute(2,0,1)
     
