@@ -28,7 +28,7 @@
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
-                        "mask_mode": "hybrid" // onedirection | fourdirection | hybrid | manual
+                        "mask_mode": "bottom" // onedirection | fourdirection | hybrid | manual
                     },
                     "data_bounds": [
                                     -14.145477391842705,
@@ -74,9 +74,6 @@
                 "args":{
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/test.flist",
                     "data_len":     -1,                                // Use full data set
-                    "mask_config": {
-                        "mask_mode": "center"
-                    },
                     "data_bounds": [
                                     -14.145477391842705,
                                     25.55866949139715,
@@ -132,7 +129,7 @@
                     "unet": {
                         "in_channel":        12,
                         "out_channel":       6,
-                        "inner_channel":     32,                      // was 64
+                        "inner_channel":     128,                      // was 64
                         "channel_mults": [
                             1,
                             2,
