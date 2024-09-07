@@ -308,59 +308,6 @@ class InpaintDataset(data.Dataset):
                 f'Mask mode {self.mask_mode} has not been implemented.')
         return torch.from_numpy(mask).permute(2,0,1)
 
-class InpaintProfiles(data.Dataset):
-    def __init__(self, data_root, data_len, mask_config, data_bounds, image_size, loader=pytorch_loader):
-        imgs = make_dataset(data_root, filetype='tensor')
-        if data_len > 0:
-            self.imgs = imgs[:int(data_len)]
-        else:
-            self.imgs = imgs
-        self.tfs         = tensor_transforms
-        self.loader      = loader
-        self.data_bounds = data_bounds
-        self.image_size  = image_size
-        self.mask_config = mask_config
-        self.mask_mode   = self.mask_config['mask_mode']
-
-    def __getitem__(self, index):
-        ret = {}
-        path = self.imgs[index]
-        x, y = self.tfs(self.loader(path), self.data_bounds)
-        mask = self.get_mask()
-        # cond_image = img*(1. - mask) + mask*torch.randn_like(img)
-        # mask_img = img*(1. - mask) + mask
-
-        ret['gt_image'] = y
-        ret['cond_image'] = cond_image
-        ret['mask_image'] = mask_img
-        ret['mask'] = mask
-        ret['path'] = path.rsplit("/")[-1].rsplit("\\")[-1]
-        return ret
-
-    def __len__(self):
-        return len(self.imgs)
-
-    def get_mask(self):
-        if self.mask_mode == 'bbox':
-            mask = bbox2mask(self.image_size, random_bbox())
-        elif self.mask_mode == 'center':
-            h, w = self.image_size
-            mask = bbox2mask(self.image_size, (h//4, w//4, h//2, w//2))
-        elif self.mask_mode == 'irregular':
-            mask = get_irregular_mask(self.image_size)
-        elif self.mask_mode == 'free_form':
-            mask = brush_stroke_mask(self.image_size)
-        elif self.mask_mode == 'hybrid':
-            regular_mask = bbox2mask(self.image_size, random_bbox())
-            irregular_mask = brush_stroke_mask(self.image_size, )
-            mask = regular_mask | irregular_mask
-        elif self.mask_mode == 'file':
-            pass
-        else:
-            raise NotImplementedError(
-                f'Mask mode {self.mask_mode} has not been implemented.')
-        return torch.from_numpy(mask).permute(2,0,1)
-
 class UncroppingDataset(data.Dataset):
     def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[256, 256], loader=pil_loader):
         imgs = make_dataset(data_root)
@@ -517,3 +464,28 @@ class LidarImg2ImgDataset(data.Dataset):
     #         raise NotImplementedError(
     #             f'Mask mode {self.mask_mode} has not been implemented.')
     #     return torch.from_numpy(mask).permute(2,0,1)
+
+class InpaintProfiles(data.Dataset):
+    def __init__(self, data_root, data_len, data_bounds, image_size, loader=pytorch_loader):
+        imgs = make_dataset(data_root, filetype='tensor')  # Refer to samples as "imgs" for simplicity's sake
+        if data_len > 0:
+            self.imgs = imgs[:int(data_len)]
+        else:
+            self.imgs = imgs
+        self.tfs         = tensor_transforms
+        self.loader      = loader
+        self.data_bounds = data_bounds
+        self.image_size  = image_size
+
+    def __getitem__(self, index):
+        ret = {}
+        path = self.imgs[index]
+        x, y = self.tfs(self.loader(path), self.data_bounds)
+
+        ret['gt_image']   = y
+        ret['cond_image'] = x
+        ret['path'] = path.rsplit("/")[-1].rsplit("\\")[-1]
+        return ret
+
+    def __len__(self):
+        return len(self.imgs)

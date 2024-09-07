@@ -23,13 +23,10 @@
         "train": { 
             "which_dataset": {                                         // import designated dataset using arguments 
                 "name": [           "data.dataset", 
-                                    "LidarImg2ImgDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
+                                    "InpaintProfiles"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
-                    "mask_config": {
-                        "mask_mode": "bottom" // onedirection | fourdirection | hybrid | manual
-                    },
                     "data_bounds": [
                                     -14.145477391842705,
                                     25.55866949139715,
@@ -70,7 +67,7 @@
         },
         "test": {                                                      // TEST SETTINGS
             "which_dataset": {
-                "name":             "LidarImg2ImgDataset",             // import Dataset() class / function(not recommend) from default file
+                "name":             "InpaintProfiles",             // import Dataset() class / function(not recommend) from default file
                 "args":{
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/test.flist",
                     "data_len":     -1,                                // Use full data set
