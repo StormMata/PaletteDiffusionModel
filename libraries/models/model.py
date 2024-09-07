@@ -115,7 +115,7 @@ class Palette(BaseModel):
 
     def train_step(self):
         if self.opt['global_rank'] == 0:
-            print("ALEX AT TOP OF train_step in model.py; epoch is ", self.epoch)
+            print("STORM AT TOP OF train_step in model.py; epoch is ", self.epoch)
         self.netG.train()
         self.train_metrics.reset()
         total_train_loss = torch.tensor(0.0).to(self.opt['global_rank'])  # Create a tensor to store the training loss on each GPU
@@ -226,41 +226,48 @@ class Palette(BaseModel):
                 wandb.log(wandb_val_out_dict)
 
                 u_xy_input = self.cond_image[:self.batch_size,0,:,:].cpu().float().numpy()
-                u_xy_gt = self.gt_image[:self.batch_size,0,:,:].cpu().float().numpy()
-                u_xy_pred = self.visuals[-self.batch_size:,0,:,:].cpu().float().numpy()
-                fig_u_xy = self.plot_cross_section_wandb(u_xy_input, u_xy_gt, u_xy_pred, self.batch_size)
+                u_xy_gt    = self.gt_image[:self.batch_size,0,:,:].cpu().float().numpy()
+                u_xy_pred  = self.visuals[-self.batch_size:,0,:,:].cpu().float().numpy()
+                fig_u_xy   = self.plot_cross_section_wandb(u_xy_input, u_xy_gt, u_xy_pred, self.batch_size)
                 wandb.log({'visual demo u_xy': fig_u_xy})
                 plt.close(fig_u_xy)
 
-                if self.cond_image.shape[1] == 5:  # plot other variables if they are being reconstructed
+                if self.cond_image.shape[1] == 6:  # plot other variables if they are being reconstructed
                     v_xy_input = self.cond_image[:self.batch_size,1,:,:].cpu().float().numpy()
-                    v_xy_gt = self.gt_image[:self.batch_size,1,:,:].cpu().float().numpy()
-                    v_xy_pred = self.visuals[-self.batch_size:,1,:,:].cpu().float().numpy()
-                    fig_v_xy = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_pred, self.batch_size)
+                    v_xy_gt    = self.gt_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_pred  = self.visuals[-self.batch_size:,1,:,:].cpu().float().numpy()
+                    fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_pred, self.batch_size)
 
-                    w_xy_input = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
-                    w_xy_gt = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
-                    w_xy_pred = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
-                    fig_w_xy = self.plot_cross_section_wandb(w_xy_input, w_xy_gt, w_xy_pred, self.batch_size)
+                    hpdc_input = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    hpdc_gt    = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    hpdc_pred  = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
+                    fig_hpdc   = self.plot_cross_section_wandb(hpdc_input, hpdc_gt, hpdc_pred, self.batch_size)
 
-                    T_xy_input = self.cond_image[:self.batch_size,3,:,:].cpu().float().numpy()
-                    T_xy_gt = self.gt_image[:self.batch_size,3,:,:].cpu().float().numpy()
-                    T_xy_pred = self.visuals[-self.batch_size:,3,:,:].cpu().float().numpy()
-                    fig_T_xy = self.plot_cross_section_wandb(T_xy_input, T_xy_gt, T_xy_pred, self.batch_size)
+                    hpds_input = self.cond_image[:self.batch_size,3,:,:].cpu().float().numpy()
+                    hpds_gt    = self.gt_image[:self.batch_size,3,:,:].cpu().float().numpy()
+                    hpds_pred  = self.visuals[-self.batch_size:,3,:,:].cpu().float().numpy()
+                    fig_hpds   = self.plot_cross_section_wandb(hpds_input, hpds_gt, hpds_pred, self.batch_size)
 
-                    TKE_xy_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
-                    TKE_xy_gt = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
-                    TKE_xy_pred = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
-                    fig_TKE_xy = self.plot_cross_section_wandb(TKE_xy_input, TKE_xy_gt, TKE_xy_pred, self.batch_size)
+                    dpyc_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
+                    dpyc_gt    = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
+                    dpyc_pred  = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
+                    fig_dpyc   = self.plot_cross_section_wandb(dpyc_input, dpyc_gt, dpyc_pred, self.batch_size)
+
+                    dpys_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
+                    dpys_gt    = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
+                    dpys_pred  = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
+                    fig_dpys   = self.plot_cross_section_wandb(dpys_input, dpys_gt, dpys_pred, self.batch_size)
 
                     wandb.log({'visual demo v_xy': fig_v_xy,
-                               'visual demo w_xy': fig_w_xy,
-                               'visual demo T_xy': fig_T_xy,
-                               'visual demo TKE_xy': fig_TKE_xy})
+                               'visual demo hpdc': fig_hpdc,
+                               'visual demo hpds': fig_hpds,
+                               'visual demo dpyc': fig_dpyc,
+                               'visual demo dpys': fig_dpys})
                     plt.close(fig_v_xy)
-                    plt.close(fig_w_xy)
-                    plt.close(fig_T_xy)
-                    plt.close(fig_TKE_xy)
+                    plt.close(fig_hpdc)
+                    plt.close(fig_hpds)
+                    plt.close(fig_dpyc)
+                    plt.close(fig_dpys)
 
             for key, value in self.get_current_visuals(phase='val').items():
                 self.writer.add_images(key, value)

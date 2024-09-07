@@ -156,40 +156,40 @@ def tensor_transforms(tensors, data_bounds):
         print("min/max before scaling")
         print("u:",    x[0].min(), x[0].max())
         print("v:",    x[1].min(), x[1].max())
-        print("hpdc:", x[2].min(), x[2].max())
-        print("hpds:", x[3].min(), x[3].max())
-        print("dpyc:", x[4].min(), x[4].max())
-        print("dpys:", x[5].min(), x[5].max())
+        #print("hpdc:", x[2].min(), x[2].max())
+        #print("hpds:", x[3].min(), x[3].max())
+        #print("dpyc:", x[4].min(), x[4].max())
+        #print("dpys:", x[5].min(), x[5].max())
 
         # Check that data is within expected bounds
         assert (x[0,:,:].min() >= umin)    & (x[0,:,:].max() <= umax),    f"Unexpected u values! min/max    = {x[0,:,:].min()}/{x[0,:,:].max()}"
         assert (x[1,:,:].min() >= vmin)    & (x[1,:,:].max() <= vmax),    f"Unexpected v values! min/max    = {x[1,:,:].min()}/{x[1,:,:].max()}"
-        assert (x[2,:,:].min() >= hpdcmin) & (x[2,:,:].max() <= hpdcmax), f"Unexpected hpdc values! min/max = {x[2,:,:].min()}/{x[2,:,:].max()}"
-        assert (x[3,:,:].min() >= hpdsmin) & (x[3,:,:].max() <= hpdsmax), f"Unexpected hpds values! min/max = {x[3,:,:].min()}/{x[3,:,:].max()}"
-        assert (x[4,:,:].min() >= dpycmin) & (x[4,:,:].max() <= dpycmax), f"Unexpected dpyc values! min/max = {x[4,:,:].min()}/{x[4,:,:].max()}"
-        assert (x[5,:,:].min() >= dpysmin) & (x[5,:,:].max() <= dpysmax), f"Unexpected dpys values! min/max = {x[5,:,:].min()}/{x[5,:,:].max()}"
+        #assert (x[2,:,:].min() >= hpdcmin) & (x[2,:,:].max() <= hpdcmax), f"Unexpected hpdc values! min/max = {x[2,:,:].min()}/{x[2,:,:].max()}"
+        #assert (x[3,:,:].min() >= hpdsmin) & (x[3,:,:].max() <= hpdsmax), f"Unexpected hpds values! min/max = {x[3,:,:].min()}/{x[3,:,:].max()}"
+        #assert (x[4,:,:].min() >= dpycmin) & (x[4,:,:].max() <= dpycmax), f"Unexpected dpyc values! min/max = {x[4,:,:].min()}/{x[4,:,:].max()}"
+        #assert (x[5,:,:].min() >= dpysmin) & (x[5,:,:].max() <= dpysmax), f"Unexpected dpys values! min/max = {x[5,:,:].min()}/{x[5,:,:].max()}"
 
         x[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
         x[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
-        x[2,:,:] = 2*(x[2,:,:] - hpdcmin)/(hpdcmax - hpdcmin) - 1
-        x[3,:,:] = 2*(x[3,:,:] - hpdsmin)/(hpdsmax - hpdsmin) - 1
-        x[4,:,:] = 2*(x[4,:,:] - dpycmin)/(dpycmax - dpycmin) - 1
-        x[5,:,:] = 2*(x[5,:,:] - dpysmin)/(dpysmax - dpysmin) - 1
+        #x[2,:,:] = 2*(x[2,:,:] - hpdcmin)/(hpdcmax - hpdcmin) - 1
+        #x[3,:,:] = 2*(x[3,:,:] - hpdsmin)/(hpdsmax - hpdsmin) - 1
+        #x[4,:,:] = 2*(x[4,:,:] - dpycmin)/(dpycmax - dpycmin) - 1
+        #x[5,:,:] = 2*(x[5,:,:] - dpysmin)/(dpysmax - dpysmin) - 1
 
         y[0,:,:] = 2*(y[0,:,:] - umin)/(umax - umin) - 1
         y[1,:,:] = 2*(y[1,:,:] - vmin)/(vmax - vmin) - 1
-        y[2,:,:] = 2*(y[2,:,:] - hpdcmin)/(hpdcmax - hpdcmin) - 1
-        y[3,:,:] = 2*(y[3,:,:] - hpdsmin)/(hpdsmax - hpdsmin) - 1
-        y[4,:,:] = 2*(y[4,:,:] - dpycmin)/(dpycmax - dpycmin) - 1
-        y[5,:,:] = 2*(y[5,:,:] - dpysmin)/(dpysmax - dpysmin) - 1
+        #y[2,:,:] = 2*(y[2,:,:] - hpdcmin)/(hpdcmax - hpdcmin) - 1
+        #y[3,:,:] = 2*(y[3,:,:] - hpdsmin)/(hpdsmax - hpdsmin) - 1
+        #y[4,:,:] = 2*(y[4,:,:] - dpycmin)/(dpycmax - dpycmin) - 1
+        #y[5,:,:] = 2*(y[5,:,:] - dpysmin)/(dpysmax - dpysmin) - 1
 
         print("min/max after scaling")
         print("u:", x[0].min(), x[0].max())
         print("v:", x[1].min(), x[1].max())
-        print("hpdc:", x[2].min(), x[2].max())
-        print("hpds:", x[3].min(), x[3].max())
-        print("dpyc:", x[4].min(), x[4].max())
-        print("dpys:", x[5].min(), x[5].max())
+        #print("hpdc:", x[2].min(), x[2].max())
+        #print("hpds:", x[3].min(), x[3].max())
+        #print("dpyc:", x[4].min(), x[4].max())
+        #print("dpys:", x[5].min(), x[5].max())
 
     else:
         raise ValueError(f"Expected 1 or 5 channel data, but got {x.shape[0]} channels")
