@@ -1,6 +1,6 @@
 {
-    "name":          "04",                                             // Experiment name
-    "wandb_project": "colorization_test",                                      // Weights and Biases experiment name (why is this different)
+    "name":          "01",                                             // Experiment name
+    "wandb_project": "colorization_by_sector",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
                       2,
@@ -25,21 +25,21 @@
                 "name": [           "data.dataset", 
                                     "InpaintProfiles"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/train_and_val.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_1/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "data_bounds": [
                                     -14.145477391842705,
                                     25.55866949139715,
                                     -20.310099955027688,
                                     27.949959019988107,
-                                    -0.9999608263946371,
-                                    1.0,
-                                    -0.9999902065507035,
-                                    0.9974949866040544,
-                                    -0.999999999545659,
-                                    0.9999610927573088,
-                                    -0.9999903395061709,
-                                    0.9999900726865629
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
                     ],
                     "image_size": [
                                     96,
@@ -69,21 +69,21 @@
             "which_dataset": {
                 "name":             "InpaintProfiles",             // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/test.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_1/test.flist",
                     "data_len":     -1,                                // Use full data set
                     "data_bounds": [
                                     -14.145477391842705,
                                     25.55866949139715,
                                     -20.310099955027688,
                                     27.949959019988107,
-                                    -0.9999608263946371,
-                                    1.0,
-                                    -0.9999902065507035,
-                                    0.9974949866040544,
-                                    -0.999999999545659,
-                                    0.9999610927573088,
-                                    -0.9999903395061709,
-                                    0.9999900726865629
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
                     ],
                     "image_size": [
                                     96,
