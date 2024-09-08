@@ -184,7 +184,7 @@
         "val_epoch": 1, // valdation every specified number of epochs
         "save_checkpoint_epoch": 1,
         "log_iter": 1e4, // log every specified number of iterations
-        "tensorboard" : true // tensorboardX enable
+        "tensorboard" : false // tensorboardX enable
     },
     
     "debug": { // arguments in debug mode, which will replace arguments in train
