@@ -62,7 +62,7 @@ def random_cropping_bbox(img_shape = (256, 256), mask_mode = 'onedirection'):
             left = np.random.randint(0, w-width)
     return (top, left, height, width)
 
-def random_bbox(img_shape = (96, 200), max_bbox_shape = (96, 200), max_bbox_delta = 40, min_margin = 0):
+def random_bbox(img_shape = (96, 200), max_bbox_shape = (48, 100), max_bbox_delta = 10, min_margin = 2):
     """Generate a random bbox for the mask on a given image.
 
     In our implementation, the max value cannot be obtained since we use
