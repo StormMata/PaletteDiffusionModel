@@ -5,35 +5,39 @@ import math
 import numpy as np
 from PIL import Image, ImageDraw
 
-def bottom_mask(img_shape=(96, 200), mask_size=(96, 50)):
-    """Create a mask of specified size positioned at the bottom of the image.
+def bottom_mask(img_shape, dtype='uint8'):
+    """Generate mask in ndarray from bbox.
+
+    The returned mask has the shape of (h, w, 1). '1' indicates the
+    hole and '0' indicates the valid regions.
+
+    We prefer to use `uint8` as the data type of masks, which may be different
+    from other codes in the community.
 
     Args:
-        img_shape (tuple[int]): The size of an image, in the form of (h, w).
-        mask_size (tuple[int]): The size of the mask, in the form of (h, w).
+        img_shape (tuple[int]): The size of the image.
+        bbox (tuple[int]): Configuration tuple, (top, left, height, width)
+        dtype (str): Indicate the data type of returned masks. Default: 'uint8'
 
-    Returns:
-        numpy.ndarray: The generated mask array with shape (h, w, 1).
+    Return:
+        numpy.ndarray: Mask in the shape of (h, w, 1).
     """
-    img_h = 96
-    img_w = 200 
-    mask_h = 96
-    mask_w = 200
 
-    if mask_h > img_h or mask_w > img_w:
-        raise ValueError(f'Mask size {mask_size} should be smaller than or equal to '
-                         f'image size {img_shape}')
-    
-    # Initialize a mask with zeros
-    mask = np.zeros((img_h, img_w, 1), dtype=np.uint8)
-    
-    # Define the top-left corner of the mask
-    top = img_h - mask_h  # Position the mask at the bottom
-    left = (img_w - mask_w) // 2  # Center the mask horizontally
-    
-    # Set the mask area to 1
-    mask[top:top + mask_h, left:left + mask_w, 0] = 1
-    
+    sector_id = np.random.randint(1, 5)
+
+    height, width = img_shape[:2]
+
+    mask = np.zeros((height, width, 1), dtype=dtype)
+
+    if sector_id == 1:
+        mask[0:height, 0:50, :] = 1
+    elif sector_id == 2:
+        mask[0:height, 50:100, :] = 1
+    elif sector_id == 3:
+        mask[0:height, 100:150, :] = 1
+    elif sector_id == 4:
+        mask[0:height, 150:200, :] = 1
+
     return mask
 
 def random_cropping_bbox(img_shape = (256, 256), mask_mode = 'onedirection'):
@@ -153,7 +157,7 @@ def bbox2mask(img_shape, bbox, dtype='uint8'):
     height, width = img_shape[:2]
 
     mask = np.zeros((height, width, 1), dtype=dtype)
-    mask[bbox[0]:bbox[0] + bbox[2], bbox[1]:bbox[1] + bbox[3], :] = 1
+    mask[0:height, 0:50, :] = 1
 
     return mask
 

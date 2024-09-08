@@ -287,24 +287,26 @@ class InpaintDataset(data.Dataset):
         return len(self.imgs)
 
     def get_mask(self):
-        if self.mask_mode == 'bbox':
-            mask = bbox2mask(self.image_size, random_bbox())
-        elif self.mask_mode == 'center':
-            h, w = self.image_size
-            mask = bbox2mask(self.image_size, (h//4, w//4, h//2, w//2))
-        elif self.mask_mode == 'irregular':
-            mask = get_irregular_mask(self.image_size)
-        elif self.mask_mode == 'free_form':
-            mask = brush_stroke_mask(self.image_size)
-        elif self.mask_mode == 'hybrid':
-            regular_mask = bbox2mask(self.image_size, random_bbox())
-            irregular_mask = brush_stroke_mask(self.image_size, )
-            mask = regular_mask | irregular_mask
-        elif self.mask_mode == 'file':
-            pass
-        else:
-            raise NotImplementedError(
-                f'Mask mode {self.mask_mode} has not been implemented.')
+        if self.mask_mode == 'bottom':
+            mask = bottom_mask(self.image_size)
+        # if self.mask_mode == 'bbox':
+        #     mask = bbox2mask(self.image_size, random_bbox())
+        # elif self.mask_mode == 'center':
+        #     h, w = self.image_size
+        #     mask = bbox2mask(self.image_size, (h//4, w//4, h//2, w//2))
+        # elif self.mask_mode == 'irregular':
+        #     mask = get_irregular_mask(self.image_size)
+        # elif self.mask_mode == 'free_form':
+        #     mask = brush_stroke_mask(self.image_size)
+        # elif self.mask_mode == 'hybrid':
+        #     regular_mask = bbox2mask(self.image_size, random_bbox())
+        #     irregular_mask = brush_stroke_mask(self.image_size, )
+        #     mask = regular_mask | irregular_mask
+        # elif self.mask_mode == 'file':
+        #     pass
+        # else:
+        #     raise NotImplementedError(
+        #         f'Mask mode {self.mask_mode} has not been implemented.')
         return torch.from_numpy(mask).permute(2,0,1)
 
 class UncroppingDataset(data.Dataset):
