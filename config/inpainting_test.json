@@ -23,7 +23,7 @@
         "train": { 
             "which_dataset": {                                         // import designated dataset using arguments 
                 "name": [           "data.dataset", 
-                                    "InpaintProfiles"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
+                                    "InpaintDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_1/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
@@ -52,7 +52,7 @@
         },
         "test": {                                                      // TEST SETTINGS
             "which_dataset": {
-                "name":             "InpaintProfiles",             // import Dataset() class / function(not recommend) from default file
+                "name":             "InpaintDataset",             // import Dataset() class / function(not recommend) from default file
                 "args":{
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_1/test.flist",
                     "data_len":     -1,                                // Use full data set

@@ -9,7 +9,7 @@ from .util.mask import (bottom_mask, bbox2mask, brush_stroke_mask, get_irregular
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
-    '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP',
+    '.png', '.PNG', '.ppm', '.PPM', '.bmp', '.BMP', '.pt',
 ]
 ARR_EXTENSIONS = ['.npy']
 TENSOR_EXTENSIONS = ['.pt']
