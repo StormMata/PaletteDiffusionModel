@@ -254,21 +254,18 @@ class InpaintQGDataset(data.Dataset):
             
 class InpaintDataset(data.Dataset):
     # def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[256, 256], loader=pil_loader):
-    def __init__(self, data_root, mask_config={}, data_len=-1, image_size=[256, 256], loader=pytorch_loader):
-        imgs = make_dataset(data_root)
+    def __init__(self, data_root, data_len, mask_config, data_bounds, image_size, loader=pytorch_loader):
+        imgs = make_dataset(data_root, filetype='tensor')  # Refer to samples as "imgs" for simplicity's sake
         if data_len > 0:
             self.imgs = imgs[:int(data_len)]
         else:
             self.imgs = imgs
-        self.tfs = transforms.Compose([
-                transforms.Resize((image_size[0], image_size[1])),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5,0.5, 0.5])
-        ])
-        self.loader = loader
+        self.tfs         = tensor_transforms
+        self.loader      = loader
+        self.data_bounds = data_bounds
+        self.image_size  = image_size
         self.mask_config = mask_config
-        self.mask_mode = self.mask_config['mask_mode']
-        self.image_size = image_size
+        self.mask_mode   = self.mask_config['mask_mode']
 
     def __getitem__(self, index):
         ret = {}

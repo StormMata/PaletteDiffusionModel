@@ -29,9 +29,27 @@
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
                         "mask_mode": "hybrid"
-                    }
-                } 
-            },
+                    },
+                    "data_bounds": [
+                        -14.145477391842705,
+                        25.55866949139715,
+                        -20.310099955027688,
+                        27.949959019988107,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+        ],
+        "image_size": [
+                        96,
+                        200
+        ]
+    } 
+},
             "dataloader":{
                 "validation_split": 509,                               // percent or number 
                 "args":{                                               // arguments to initialize train_dataloader
@@ -59,6 +77,20 @@
                     "mask_config": {
                         "mask_mode": "center"
                     },
+                    "data_bounds": [
+                        -14.145477391842705,
+                        25.55866949139715,
+                        -20.310099955027688,
+                        27.949959019988107,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
                     "image_size": [
                         96,
                         200
