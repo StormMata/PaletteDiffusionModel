@@ -274,7 +274,7 @@ class InpaintDataset(data.Dataset):
         ret = {}
         path = self.imgs[index]
         # img = self.tfs(self.loader(path))
-        _, img = self.tfs(self.loader(path))
+        _, img = self.tfs(self.loader(path), self.data_bounds)
         mask = self.get_mask()
         cond_image = img*(1. - mask) + mask*torch.randn_like(img)
         mask_img = img*(1. - mask) + mask
