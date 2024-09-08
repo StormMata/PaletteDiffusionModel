@@ -1,5 +1,5 @@
 {
-    "name":          "02",                                             // Experiment name
+    "name":          "01",                                             // Experiment name
     "wandb_project": "colorization_by_sector",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -10,13 +10,13 @@
     "datatype":       "2d_numpy",                                      // "image", "2d_numpy", "3d_numpy" (2d_numpy is okay for 2D PyTorch tensors!)
 
     "path": {                                                          // set every part file path
-        "base_dir":        "/scratch/smata/PaletteDiffusionModel/train_01_240907_184429",                 // base path for all log except resume_state
+        "base_dir":        "/scratch/smata/PaletteDiffusionModel",                 // base path for all log except resume_state
         "code":            "code",                                     // code backup
         "tb_logger":       "tb_logger",                                // path of tensorboard logger
         "results":         "results",
         "checkpoint":      "checkpoint",
-        // "resume_state":    "/scratch/smata/PaletteDiffusionModel/train_01_240907_184429/checkpoint/2000" 
-        "resume_state":    2000                                        // ex: 100, loading .state  and .pth from given epoch and iteration
+        // "resume_state": "/scratch/smata/PaletteDiffusionModel/checkpoint" 
+        "resume_state":    null                                        // ex: 100, loading .state  and .pth from given epoch and iteration
     },
 
     "datasets": {                                                      // TRAIN SETTINGS
@@ -25,7 +25,7 @@
                 "name": [           "data.dataset", 
                                     "InpaintProfiles"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_2/train_and_val.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_1/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "data_bounds": [
                                     -14.145477391842705,
@@ -50,14 +50,14 @@
             "dataloader":{
                 "validation_split": 509,                               // percent or number 
                 "args":{                                               // arguments to initialize train_dataloader
-                    "batch_size":   32,                                // batch size in each gpu
+                    "batch_size":   1,                                // batch size in each gpu
                     "num_workers":  4,                                 // Same as number of GPUs?
                     "shuffle":      true,                              // Shuffle at each epoch
                     "pin_memory":   true,
                     "drop_last":    true                               // Drop incomplete batch
                 },
                 "val_args":{                                           // arguments to initialize valid_dataloader
-                    "batch_size":   32,                                // batch size in each gpu
+                    "batch_size":   1,                                // batch size in each gpu
                     "num_workers":  4,
                     "shuffle":      false,
                     "pin_memory":   true,
@@ -69,7 +69,7 @@
             "which_dataset": {
                 "name":             "InpaintProfiles",             // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_2/test.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/sector_1/test.flist",
                     "data_len":     -1,                                // Use full data set
                     "data_bounds": [
                                     -14.145477391842705,
@@ -92,7 +92,7 @@
             },
             "dataloader":{
                 "args":{
-                    "batch_size":   32,
+                    "batch_size":   1,
                     "num_workers":  4,
                     "pin_memory":   true
                 }
