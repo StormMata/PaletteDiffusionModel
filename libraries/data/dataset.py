@@ -273,7 +273,8 @@ class InpaintDataset(data.Dataset):
     def __getitem__(self, index):
         ret = {}
         path = self.imgs[index]
-        img = self.tfs(self.loader(path))
+        # img = self.tfs(self.loader(path))
+        _, img = self.tfs(self.loader(path))
         mask = self.get_mask()
         cond_image = img*(1. - mask) + mask*torch.randn_like(img)
         mask_img = img*(1. - mask) + mask
