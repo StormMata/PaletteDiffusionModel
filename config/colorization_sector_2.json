@@ -15,8 +15,8 @@
         "tb_logger":       "tb_logger",                                // path of tensorboard logger
         "results":         "results",
         "checkpoint":      "checkpoint",
-        "resume_state":    "/scratch/smata/PaletteDiffusionModel/train_01_240907_184429/checkpoint" 
-        "resume_state":    2000                                        // ex: 100, loading .state  and .pth from given epoch and iteration
+        "resume_state":    "/scratch/smata/PaletteDiffusionModel/train_01_240907_184429/checkpoint/2000" 
+        //"resume_state":    2000                                        // ex: 100, loading .state  and .pth from given epoch and iteration
     },
 
     "datasets": {                                                      // TRAIN SETTINGS
