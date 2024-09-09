@@ -5,7 +5,7 @@ import torch.utils.data as data
 
 from PIL import Image
 from torchvision import transforms
-from .util.mask import (bottom_mask, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
+from .util.mask import (bottom_mask, bottom_mask_10, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
@@ -289,6 +289,8 @@ class InpaintDataset(data.Dataset):
     def get_mask(self):
         if self.mask_mode == 'bottom':
             mask = bottom_mask(self.image_size)
+        elif self.mask_mode == 'bottom_10':
+            mask = bottom_mask_10(self.image_size)
         # if self.mask_mode == 'bbox':
         #     mask = bbox2mask(self.image_size, random_bbox())
         # elif self.mask_mode == 'center':

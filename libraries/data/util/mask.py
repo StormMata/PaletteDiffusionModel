@@ -40,6 +40,73 @@ def bottom_mask(img_shape, dtype='uint8'):
 
     return mask
 
+def bottom_mask_10(img_shape, dtype='uint8'):
+    """Generate mask in ndarray from bbox.
+
+    The returned mask has the shape of (h, w, 1). '1' indicates the
+    hole and '0' indicates the valid regions.
+
+    We prefer to use `uint8` as the data type of masks, which may be different
+    from other codes in the community.
+
+    Args:
+        img_shape (tuple[int]): The size of the image.
+        bbox (tuple[int]): Configuration tuple, (top, left, height, width)
+        dtype (str): Indicate the data type of returned masks. Default: 'uint8'
+
+    Return:
+        numpy.ndarray: Mask in the shape of (h, w, 1).
+    """
+
+    sector_id = np.random.randint(1, 21)
+
+    height, width = img_shape[:2]
+
+    mask = np.zeros((height, width, 1), dtype=dtype)
+
+    if sector_id == 1:
+        mask[0:height, 0:10, :] = 1
+    elif sector_id == 2:
+        mask[0:height, 10:20, :] = 1
+    elif sector_id == 3:
+        mask[0:height, 20:30, :] = 1
+    elif sector_id == 4:
+        mask[0:height, 30:40, :] = 1
+    elif sector_id == 5:
+        mask[0:height, 40:50, :] = 1
+    elif sector_id == 6:
+        mask[0:height, 50:60, :] = 1
+    elif sector_id == 7:
+        mask[0:height, 60:70, :] = 1
+    elif sector_id == 8:
+        mask[0:height, 70:80, :] = 1
+    elif sector_id == 9:
+        mask[0:height, 80:90, :] = 1
+    elif sector_id == 10:
+        mask[0:height, 90:100, :] = 1
+    elif sector_id == 11:
+        mask[0:height, 100:110, :] = 1
+    elif sector_id == 12:
+        mask[0:height, 110:120, :] = 1
+    elif sector_id == 13:
+        mask[0:height, 120:130, :] = 1
+    elif sector_id == 14:
+        mask[0:height, 130:140, :] = 1
+    elif sector_id == 15:
+        mask[0:height, 140:150, :] = 1
+    elif sector_id == 16:
+        mask[0:height, 150:160, :] = 1
+    elif sector_id == 17:
+        mask[0:height, 160:170, :] = 1
+    elif sector_id == 18:
+        mask[0:height, 170:180, :] = 1
+    elif sector_id == 19:
+        mask[0:height, 180:190, :] = 1
+    elif sector_id == 20:
+        mask[0:height, 190:200, :] = 1
+
+    return mask
+
 def random_cropping_bbox(img_shape = (256, 256), mask_mode = 'onedirection'):
     h, w = img_shape
     if mask_mode == 'onedirection':
