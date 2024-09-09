@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J paint_10                # job name
+#SBATCH -J paint_104                # job name
 #SBATCH --nodes=1                  #
 #SBATCH --time=7-00:00:00          # set time limit
 #SBATCH --partition=gpu-h100l      # GPU partition
