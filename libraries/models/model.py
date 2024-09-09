@@ -411,32 +411,32 @@ class Palette(BaseModel):
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
             pltmin3, pltmax3 = data3_plane.min(), data3_plane.max()
 
-            ax[0].set_title(f'Input, Mem {i}')
-            im0 = axs.imshow(input_plane[i,:,:].T,
+            ax[0].set_title(f'Input')
+            im0 = axs.imshow(input_plane[:,:].T,
                     vmin=pltmin,
                     vmax=pltmax,
                     origin='lower')
             fig.colorbar(im0, ax=ax[0])
-            ax[0].set_title(f'GT, Mem {i}')
-            im1 = axs.imshow(data0_plane[i,:,:].T,
+            ax[0].set_title(f'GT')
+            im1 = axs.imshow(data0_plane[:,:].T,
                     vmin=pltmin,
                     vmax=pltmax,
                     origin='lower')
             fig.colorbar(im1, ax=ax[1])
-            ax[0].set_title(f'Mask, Mem {i}')
-            im2 = axs.imshow(data1_plane[i,:,:].T,
+            ax[0].set_title(f'Mask')
+            im2 = axs.imshow(data1_plane[:,:].T,
                     vmin=0,
                     vmax=1,
                     origin='lower')
             fig.colorbar(im2, ax=ax[2])
-            ax[0].set_title(f'Pred, Mem {i}')
-            im3 = axs.imshow(data2_plane[i,:,:].T,
+            ax[0].set_title(f'Pred')
+            im3 = axs.imshow(data2_plane[:,:].T,
                     vmin=pltmin,
                     vmax=pltmax,
                     origin='lower')
             fig.colorbar(im3, ax=ax[3])
-            ax[0].set_title(f'Diff, Mem {i}')
-            im4 = axs.imshow(data3_plane[i,:,:].T,
+            ax[0].set_title(f'Diff')
+            im4 = axs.imshow(data3_plane[:,:].T,
                     vmin=pltmin3,
                     vmax=pltmax3,
                     cmap='RdBu_r',
