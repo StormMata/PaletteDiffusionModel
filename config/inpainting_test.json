@@ -1,5 +1,5 @@
 {
-    "name":          "01",                                             // Experiment name
+    "name":          "02",                                             // Experiment name
     "wandb_project": "inpainting_test",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
