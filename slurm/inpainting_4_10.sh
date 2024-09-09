@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J paint_410                # job name
+#SBATCH -J p_4_10                # job name
 #SBATCH --nodes=1                  #
 #SBATCH --time=7-00:00:00          # set time limit
 #SBATCH --partition=gpu-h100l      # GPU partition
@@ -16,4 +16,4 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 export MPICH_GPU_SUPPORT_ENABLED=1
 OMPI_MCA_opal_cuda_support=true
 
-conda run --no-capture-output -n diffusion python3 run.py -c config/inpainting.json -gpu 0,1,2,3 -b 32
+conda run --no-capture-output -n diffusion python3 run.py -c config/inpainting_4_10.json -gpu 0,1,2,3 -b 32

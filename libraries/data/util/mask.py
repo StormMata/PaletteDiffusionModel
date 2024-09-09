@@ -5,7 +5,7 @@ import math
 import numpy as np
 from PIL import Image, ImageDraw
 
-def bottom_mask(img_shape, dtype='uint8'):
+def bottom_mask_4(img_shape, dtype='uint8'):
     """Generate mask in ndarray from bbox.
 
     The returned mask has the shape of (h, w, 1). '1' indicates the
