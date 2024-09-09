@@ -348,64 +348,55 @@ class Palette(BaseModel):
         - data0_plane: a plane of data shaped [nbatch, nwhatever, nwhatever]
         '''
         batchsize = min(8, batchsize)
-        fig, ax = plt.subplots(4, batchsize, sharex=True, sharey=True, figsize=(batchsize*20, 8), dpi=200)
-
-        data3_plane = data1_plane - data0_plane
-        pltmin, pltmax = data0_plane.min(), data0_plane.max()
-        pltmin3, pltmax2 = data3_plane.min(), data3_plane.max()
 
         if batchsize > 1:
+
+            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*10, 8), dpi = 600)
+
+            data3_plane      = data1_plane - data0_plane
+            pltmin, pltmax   = data0_plane.min(), data0_plane.max()
+            pltmin3, pltmax3 = data3_plane.min(), data3_plane.max()
+
             for i, axs in enumerate(ax[0,:]):
-                axs.set_title(f'Input, Mem {i}')
+                axs.set_title(f'Input, Sample {i}')
                 im0 = axs.imshow(input_plane[i,:,:].T,
-                        vmin=pltmin,
-                        vmax=pltmax,
-                        origin='lower')
+                        vmin   = pltmin,
+                        vmax   = pltmax,
+                        origin = 'lower')
+                fig.colorbar(im0, ax = axs) 
             for i, axs in enumerate(ax[1,:]):
-                axs.set_title(f'GT, Mem {i}')
-                im0 = axs.imshow(data0_plane[i,:,:].T,
-                        vmin=pltmin,
-                        vmax=pltmax,
-                        origin='lower')
+                axs.set_title(f'GT, Sample {i}')
+                im1 = axs.imshow(data0_plane[i,:,:].T,
+                        vmin   = pltmin,
+                        vmax   = pltmax,
+                        origin = 'lower')
+                fig.colorbar(im1, ax = axs) 
             for i, axs in enumerate(ax[2,:]):
-                axs.set_title(f'Mask, Mem {i}')
-                axs.imshow(data1_plane[i,:,:].T,
-                        vmin=0,
-                        vmax=1,
-                        origin='lower')
+                axs.set_title(f'Mask, Sample {i}')
+                im2 = axs.imshow(data1_plane[i,:,:].T,
+                        vmin   = 0,
+                        vmax   = 1,
+                        origin = 'lower')
+                fig.colorbar(im2, ax = axs) 
             for i, axs in enumerate(ax[3,:]):
-                axs.set_title(f'Pred, Mem {i}')
-                axs.imshow(data2_plane[i,:,:].T,
-                        vmin=pltmin,
-                        vmax=pltmax,
-                        origin='lower')
+                axs.set_title(f'Pred, Sample {i}')
+                im3 = axs.imshow(data2_plane[i,:,:].T,
+                        vmin   = pltmin,
+                        vmax   = pltmax,
+                        origin = 'lower')
+                fig.colorbar(im3, ax = axs) 
             for i, axs in enumerate(ax[4,:]):
-                axs.set_title(f'Diff, Mem {i}')
-                im1 = axs.imshow(data3_plane[i,:,:].T,
-                        vmin=pltmin2,
-                        vmax=pltmax2,
-                        cmap='RdBu_r',
-                        origin='lower')
-                
-            cax0 = fig.add_axes([ax[-1,-1].get_position().x1+0.01,
-                                ax[2,-1].get_position().y0,
-                                0.02,
-                                ax[0,-1].get_position().y1-ax[2,-1].get_position().y0])
-            cbar0 = fig.colorbar(im0, cax=cax0)
-            cbar0.set_label(f'Data [m/s]')
-            cbar0.ax.tick_params()
+                axs.set_title(f'Diff, Sample {i}')
+                im4 = axs.imshow(data3_plane[i,:,:].T,
+                        vmin   = pltmin3,
+                        vmax   = pltmax3,
+                        cmap   = 'RdBu_r',
+                        origin = 'lower')  
+                fig.colorbar(im4, ax = axs) 
 
-            cax1 = fig.add_axes([ax[-1,-1].get_position().x1+0.01,
-                                ax[-1,-1].get_position().y0,
-                                0.02,
-                                ax[-1,-1].get_position().y1-ax[-1,-1].get_position().y0])
-            cbar1 = fig.colorbar(im1, cax=cax1)
-            cbar1.set_label(f'Pred - GT [%]')
-            cbar1.ax.tick_params()
+        else:
 
-        else:  # TODO: Update for input_plane
-
-            fig, ax = plt.subplots(1, 5, sharey=True, figsize=(batchsize*20, 8), dpi=600)
+            fig, ax = plt.subplots(1, 5, sharey = True, figsize = (batchsize*20, 8), dpi = 600)
 
             data3_plane      = data1_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
@@ -413,34 +404,34 @@ class Palette(BaseModel):
 
             ax[0].set_title(f'Input')
             im0 = ax[0].imshow(input_plane[:,:].T,
-                    vmin=pltmin,
-                    vmax=pltmax,
-                    origin='lower')
-            fig.colorbar(im0, ax=ax[0])
+                    vmin   = pltmin,
+                    vmax   = pltmax,
+                    origin = 'lower')
+            fig.colorbar(im0, ax = ax[0])
             ax[1].set_title(f'GT')
             im1 = ax[1].imshow(data0_plane[:,:].T,
-                    vmin=pltmin,
-                    vmax=pltmax,
-                    origin='lower')
-            fig.colorbar(im1, ax=ax[1])
+                    vmin   = pltmin,
+                    vmax   = pltmax,
+                    origin = 'lower')
+            fig.colorbar(im1, ax = ax[1])
             ax[2].set_title(f'Mask')
             im2 = ax[2].imshow(data1_plane[:,:].T,
-                    vmin=0,
-                    vmax=1,
-                    origin='lower')
-            fig.colorbar(im2, ax=ax[2])
+                    vmin   = 0,
+                    vmax   = 1,
+                    origin = 'lower')
+            fig.colorbar(im2, ax = ax[2])
             ax[3].set_title(f'Pred')
             im3 = ax[3].imshow(data2_plane[:,:].T,
-                    vmin=pltmin,
-                    vmax=pltmax,
-                    origin='lower')
-            fig.colorbar(im3, ax=ax[3])
+                    vmin   = pltmin,
+                    vmax   = pltmax,
+                    origin = 'lower')
+            fig.colorbar(im3, ax = ax[3])
             ax[4].set_title(f'Diff')
             im4 = ax[4].imshow(data3_plane[:,:].T,
-                    vmin=pltmin3,
-                    vmax=pltmax3,
-                    cmap='RdBu_r',
-                    origin='lower')   
-            fig.colorbar(im4, ax=ax[4])    
+                    vmin   = pltmin3,
+                    vmax   = pltmax3,
+                    cmap   = 'RdBu_r',
+                    origin = 'lower')   
+            fig.colorbar(im4, ax = ax[4])    
 
         return fig

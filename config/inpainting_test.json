@@ -1,5 +1,5 @@
 {
-    "name":          "02",                                             // Experiment name
+    "name":          "03",                                             // Experiment name
     "wandb_project": "inpainting_test",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -53,14 +53,14 @@
             "dataloader":{
                 "validation_split": 509,                               // percent or number 
                 "args":{                                               // arguments to initialize train_dataloader
-                    "batch_size":   3,                                // batch size in each gpu
+                    "batch_size":   32,                                // batch size in each gpu
                     "num_workers":  4,                                 // Same as number of GPUs?
                     "shuffle":      true,                              // Shuffle at each epoch
                     "pin_memory":   true,
                     "drop_last":    true                               // Drop incomplete batch
                 },
                 "val_args":{                                           // arguments to initialize valid_dataloader
-                    "batch_size":   1,                                // batch size in each gpu
+                    "batch_size":   32,                                // batch size in each gpu
                     "num_workers":  4,
                     "shuffle":      false,
                     "pin_memory":   true,
@@ -99,7 +99,7 @@
             },
             "dataloader":{
                 "args":{
-                    "batch_size": 8,
+                    "batch_size": 32,
                     "num_workers": 4,
                     "pin_memory": true
                 }
