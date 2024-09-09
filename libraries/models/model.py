@@ -227,36 +227,42 @@ class Palette(BaseModel):
 
                 u_xy_input = self.cond_image[:self.batch_size,0,:,:].cpu().float().numpy()
                 u_xy_gt    = self.gt_image[:self.batch_size,0,:,:].cpu().float().numpy()
+                u_xy_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
                 u_xy_pred  = self.visuals[-self.batch_size:,0,:,:].cpu().float().numpy()
-                fig_u_xy   = self.plot_cross_section_wandb(u_xy_input, u_xy_gt, u_xy_pred, self.batch_size)
+                fig_u_xy   = self.plot_cross_section_wandb(u_xy_input, u_xy_gt, u_xy_mask, u_xy_pred, self.batch_size)
                 wandb.log({'visual demo u_xy': fig_u_xy})
                 plt.close(fig_u_xy)
 
                 if self.cond_image.shape[1] == 6:  # plot other variables if they are being reconstructed
                     v_xy_input = self.cond_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     v_xy_gt    = self.gt_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     v_xy_pred  = self.visuals[-self.batch_size:,1,:,:].cpu().float().numpy()
-                    fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_pred, self.batch_size)
+                    fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_mask, v_xy_pred, self.batch_size)
 
                     hpdc_input = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    hpdc_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     hpdc_gt    = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
                     hpdc_pred  = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
-                    fig_hpdc   = self.plot_cross_section_wandb(hpdc_input, hpdc_gt, hpdc_pred, self.batch_size)
+                    fig_hpdc   = self.plot_cross_section_wandb(hpdc_input, hpdc_gt, hpdc_mask, hpdc_pred, self.batch_size)
 
                     hpds_input = self.cond_image[:self.batch_size,3,:,:].cpu().float().numpy()
                     hpds_gt    = self.gt_image[:self.batch_size,3,:,:].cpu().float().numpy()
+                    hpds_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     hpds_pred  = self.visuals[-self.batch_size:,3,:,:].cpu().float().numpy()
-                    fig_hpds   = self.plot_cross_section_wandb(hpds_input, hpds_gt, hpds_pred, self.batch_size)
+                    fig_hpds   = self.plot_cross_section_wandb(hpds_input, hpds_gt, hpds_mask, hpds_pred, self.batch_size)
 
                     dpyc_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
                     dpyc_gt    = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
+                    dpyc_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     dpyc_pred  = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
-                    fig_dpyc   = self.plot_cross_section_wandb(dpyc_input, dpyc_gt, dpyc_pred, self.batch_size)
+                    fig_dpyc   = self.plot_cross_section_wandb(dpyc_input, dpyc_gt, dpyc_mask, dpyc_pred, self.batch_size)
 
                     dpys_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
                     dpys_gt    = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
+                    dpys_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     dpys_pred  = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
-                    fig_dpys   = self.plot_cross_section_wandb(dpys_input, dpys_gt, dpys_pred, self.batch_size)
+                    fig_dpys   = self.plot_cross_section_wandb(dpys_input, dpys_gt, dpys_mask, dpys_pred, self.batch_size)
 
                     wandb.log({'visual demo v_xy': fig_v_xy,
                                'visual demo hpdc': fig_hpdc,
@@ -336,7 +342,7 @@ class Palette(BaseModel):
             self.save_network(network=self.netG_EMA, network_label=netG_label+'_ema')
         self.save_training_state()
 
-    def plot_cross_section_wandb(self, input_plane, data0_plane, data1_plane, batchsize):
+    def plot_cross_section_wandb(self, input_plane, data0_plane, data1_plane, data2_plane, batchsize):
         '''
         Plot a cross-section of data
         - data0_plane: a plane of data shaped [nbatch, nwhatever, nwhatever]
@@ -344,11 +350,11 @@ class Palette(BaseModel):
         batchsize = min(8, batchsize)
         fig, ax = plt.subplots(4, batchsize, sharex=True, sharey=True, figsize=(batchsize*20, 8), dpi=200)
 
-        data2_plane = data1_plane - data0_plane
+        data3_plane = data1_plane - data0_plane
         pltmin, pltmax = data0_plane.min(), data0_plane.max()
-        pltmin2, pltmax2 = data2_plane.min(), data2_plane.max()
+        pltmin3, pltmax2 = data3_plane.min(), data3_plane.max()
 
-        if batchsize > 1:
+        if batchsize == 1:
             for i, axs in enumerate(ax[0,:]):
                 axs.set_title(f'Input, Mem {i}')
                 im0 = axs.imshow(input_plane[i,:,:].T,
@@ -362,14 +368,20 @@ class Palette(BaseModel):
                         vmax=pltmax,
                         origin='lower')
             for i, axs in enumerate(ax[2,:]):
-                axs.set_title(f'Pred, Mem {i}')
+                axs.set_title(f'Mask, Mem {i}')
                 axs.imshow(data1_plane[i,:,:].T,
+                        vmin=0,
+                        vmax=1,
+                        origin='lower')
+            for i, axs in enumerate(ax[3,:]):
+                axs.set_title(f'Pred, Mem {i}')
+                axs.imshow(data2_plane[i,:,:].T,
                         vmin=pltmin,
                         vmax=pltmax,
                         origin='lower')
-            for i, axs in enumerate(ax[3,:]):
+            for i, axs in enumerate(ax[4,:]):
                 axs.set_title(f'Diff, Mem {i}')
-                im1 = axs.imshow(data2_plane[i,:,:].T,
+                im1 = axs.imshow(data3_plane[i,:,:].T,
                         vmin=pltmin2,
                         vmax=pltmax2,
                         cmap='RdBu_r',
