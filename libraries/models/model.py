@@ -405,7 +405,7 @@ class Palette(BaseModel):
 
         else:  # TODO: Update for input_plane
 
-            fig, ax = plt.subplots(1, 5, batchsize, sharex=True, sharey=True, figsize=(batchsize*20, 8), dpi=600)
+            fig, ax = plt.subplots(1, 5, sharey=True, figsize=(batchsize*20, 8), dpi=600)
 
             data3_plane      = data1_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
