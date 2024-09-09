@@ -227,7 +227,7 @@ class Palette(BaseModel):
 
                 u_xy_input = self.cond_image[:self.batch_size,0,:,:].cpu().float().numpy()
                 u_xy_gt    = self.gt_image[:self.batch_size,0,:,:].cpu().float().numpy()
-                u_xy_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                u_xy_mask  = self.mask_image[:self.batch_size,0,:,:].cpu().float().numpy()
                 u_xy_pred  = self.visuals[-self.batch_size:,0,:,:].cpu().float().numpy()
                 fig_u_xy   = self.plot_cross_section_wandb(u_xy_input, u_xy_gt, u_xy_mask, u_xy_pred, self.batch_size)
                 wandb.log({'visual demo u_xy': fig_u_xy})
@@ -241,27 +241,27 @@ class Palette(BaseModel):
                     fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_mask, v_xy_pred, self.batch_size)
 
                     hpdc_input = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
-                    hpdc_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    hpdc_mask  = self.mask_image[:self.batch_size,2,:,:].cpu().float().numpy()
                     hpdc_gt    = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
                     hpdc_pred  = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
                     fig_hpdc   = self.plot_cross_section_wandb(hpdc_input, hpdc_gt, hpdc_mask, hpdc_pred, self.batch_size)
 
                     hpds_input = self.cond_image[:self.batch_size,3,:,:].cpu().float().numpy()
                     hpds_gt    = self.gt_image[:self.batch_size,3,:,:].cpu().float().numpy()
-                    hpds_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    hpds_mask  = self.mask_image[:self.batch_size,3,:,:].cpu().float().numpy()
                     hpds_pred  = self.visuals[-self.batch_size:,3,:,:].cpu().float().numpy()
                     fig_hpds   = self.plot_cross_section_wandb(hpds_input, hpds_gt, hpds_mask, hpds_pred, self.batch_size)
 
                     dpyc_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
                     dpyc_gt    = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
-                    dpyc_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    dpyc_mask  = self.mask_image[:self.batch_size,4,:,:].cpu().float().numpy()
                     dpyc_pred  = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
                     fig_dpyc   = self.plot_cross_section_wandb(dpyc_input, dpyc_gt, dpyc_mask, dpyc_pred, self.batch_size)
 
-                    dpys_input = self.cond_image[:self.batch_size,4,:,:].cpu().float().numpy()
-                    dpys_gt    = self.gt_image[:self.batch_size,4,:,:].cpu().float().numpy()
-                    dpys_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
-                    dpys_pred  = self.visuals[-self.batch_size:,4,:,:].cpu().float().numpy()
+                    dpys_input = self.cond_image[:self.batch_size,5,:,:].cpu().float().numpy()
+                    dpys_gt    = self.gt_image[:self.batch_size,5,:,:].cpu().float().numpy()
+                    dpys_mask  = self.mask_image[:self.batch_size,5,:,:].cpu().float().numpy()
+                    dpys_pred  = self.visuals[-self.batch_size:,5,:,:].cpu().float().numpy()
                     fig_dpys   = self.plot_cross_section_wandb(dpys_input, dpys_gt, dpys_mask, dpys_pred, self.batch_size)
 
                     wandb.log({'visual demo v_xy': fig_v_xy,
@@ -351,7 +351,7 @@ class Palette(BaseModel):
 
         if batchsize > 1:
 
-            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*10, 8), dpi = 400)
+            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*5, 8), dpi = 400)
 
             data3_plane      = data1_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
@@ -388,8 +388,8 @@ class Palette(BaseModel):
             for i, axs in enumerate(ax[4,:]):
                 axs.set_title(f'Diff, Sample {i}')
                 im4 = axs.imshow(data3_plane[i,:,:].T,
-                        vmin   = pltmin3,
-                        vmax   = pltmax3,
+                        vmin   = -1,
+                        vmax   = 1,
                         cmap   = 'RdBu_r',
                         origin = 'lower')  
                 fig.colorbar(im4, ax = axs) 
@@ -428,8 +428,8 @@ class Palette(BaseModel):
             fig.colorbar(im3, ax = ax[3])
             ax[4].set_title(f'Diff')
             im4 = ax[4].imshow(data3_plane[:,:].T,
-                    vmin   = pltmin3,
-                    vmax   = pltmax3,
+                    vmin   = -1,
+                    vmax   = 1,
                     cmap   = 'RdBu_r',
                     origin = 'lower')   
             fig.colorbar(im4, ax = ax[4])    
