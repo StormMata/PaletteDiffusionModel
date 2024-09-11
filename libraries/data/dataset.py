@@ -153,7 +153,7 @@ def tensor_transforms(tensors, data_bounds):
         umin, umax, vmin, vmax, hpdcmin, hpdcmax, hpdsmin, hpdsmax, dpycmin, dpycmax, dpysmin, dpysmax = data_bounds
         # umin, umax, vmin, vmax = data_bounds
 
-        print("STORM DEBUGGING")
+        print("STORM DEBUGGING ON 6-CHANNEL DATA")
         print("min/max before scaling")
         print("u:",    x[0].min(), x[0].max())
         print("v:",    x[1].min(), x[1].max())
@@ -192,8 +192,33 @@ def tensor_transforms(tensors, data_bounds):
         #print("dpyc:", x[4].min(), x[4].max())
         #print("dpys:", x[5].min(), x[5].max())
 
+    elif x.shape[0] == 2:
+        assert x.shape[0] == 2, f"tensor_transforms assumes 6 channel data! Shape of x is {x.shape}"
+
+        # Rescale to [-1,1]
+        umin, umax, vmin, vmax = data_bounds
+
+        print("STORM DEBUGGING ON 2-CHANNEL DATA")
+        print("min/max before scaling")
+        print("u:",    x[0].min(), x[0].max())
+        print("v:",    x[1].min(), x[1].max())
+
+        # Check that data is within expected bounds
+        assert (x[0,:,:].min() >= umin)    & (x[0,:,:].max() <= umax),    f"Unexpected u values! min/max    = {x[0,:,:].min()}/{x[0,:,:].max()}"
+        assert (x[1,:,:].min() >= vmin)    & (x[1,:,:].max() <= vmax),    f"Unexpected v values! min/max    = {x[1,:,:].min()}/{x[1,:,:].max()}"
+
+        x[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
+        x[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
+
+        y[0,:,:] = 2*(y[0,:,:] - umin)/(umax - umin) - 1
+        y[1,:,:] = 2*(y[1,:,:] - vmin)/(vmax - vmin) - 1
+
+        print("min/max after scaling")
+        print("u:", x[0].min(), x[0].max())
+        print("v:", x[1].min(), x[1].max())
+
     else:
-        raise ValueError(f"Expected 1 or 5 channel data, but got {x.shape[0]} channels")
+        raise ValueError(f"Expected 1, 2, 5, or 6 channel data, but got {x.shape[0]} channels")
 
     return x, y
 

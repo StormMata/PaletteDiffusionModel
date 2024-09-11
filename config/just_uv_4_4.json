@@ -81,15 +81,7 @@
                                     -14.145477391842705,
                                     25.55866949139715,
                                     -20.310099955027688,
-                                    27.949959019988107,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0,
-                                    0
+                                    27.949959019988107
                     ],
                     "image_size": [
                         96,
@@ -130,8 +122,8 @@
                     "init_type": "kaiming", // method can be [normal | xavier| xavier_uniform | kaiming | orthogonal], default is kaiming
                     "module_name": "guided_diffusion", // sr3 | guided_diffusion
                     "unet": {
-                        "in_channel": 12,
-                        "out_channel": 6,
+                        "in_channel": 4,
+                        "out_channel": 2,
                         "inner_channel": 64,
                         "channel_mults": [
                             1,
