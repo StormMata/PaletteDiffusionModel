@@ -274,6 +274,16 @@ class Palette(BaseModel):
                     plt.close(fig_hpds)
                     plt.close(fig_dpyc)
                     plt.close(fig_dpys)
+                
+                elif self.cond_image.shape[1] == 2:
+                    v_xy_input = self.cond_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_gt    = self.gt_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_pred  = self.visuals[-self.batch_size:,1,:,:].cpu().float().numpy()
+                    fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_mask, v_xy_pred, self.batch_size)
+
+                    wandb.log({'visual demo v_xy': fig_v_xy})
+                    plt.close(fig_v_xy)
 
             for key, value in self.get_current_visuals(phase='val').items():
                 self.writer.add_images(key, value)
