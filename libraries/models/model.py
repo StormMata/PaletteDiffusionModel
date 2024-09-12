@@ -361,7 +361,7 @@ class Palette(BaseModel):
 
         if batchsize > 1:
 
-            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*5, 8), dpi = 400)
+            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*2, 8), dpi = 400)
 
             data3_plane      = data1_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
@@ -406,7 +406,7 @@ class Palette(BaseModel):
 
         else:
 
-            fig, ax = plt.subplots(1, 5, sharey = True, figsize = (batchsize*20, 8), dpi = 600)
+            fig, ax = plt.subplots(1, 5, sharey = True, figsize = (batchsize*2, 8), dpi = 600)
 
             data3_plane      = data1_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
