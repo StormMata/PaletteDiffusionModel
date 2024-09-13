@@ -1,5 +1,5 @@
 {
-    "name":          "08",                                             // Experiment name
+    "name":          "09",                                             // Experiment name
     "wandb_project": "inpainting",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -25,7 +25,7 @@
                 "name": [           "data.dataset", 
                                     "InpaintDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/dim_time/train_and_val.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/non_time/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
                         "mask_mode": "bottom_4"
@@ -68,7 +68,7 @@
             "which_dataset": {
                 "name":             "InpaintDataset",             // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/dim_time/test.flist'",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/non_time/test.flist",
                     "data_len":     -1,                                // Use full data set
                     "mask_config": {
                         "mask_mode": "bottom_4"
