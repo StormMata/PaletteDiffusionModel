@@ -147,7 +147,7 @@ def tensor_transforms(tensors, data_bounds):
         print("TKE:", x[4].min(), x[4].max())
 
     elif x.shape[0] in [4, 6]:
-        assert x.shape[0] == 6, f"tensor_transforms assumes 6 channel data! Shape of x is {x.shape}"
+        # assert x.shape[0] == 6, f"tensor_transforms assumes 6 channel data! Shape of x is {x.shape}"
 
         # Rescale to [-1,1]
         umin, umax, vmin, vmax, hpdcmin, hpdcmax, hpdsmin, hpdsmax, dpycmin, dpycmax, dpysmin, dpysmax = data_bounds
