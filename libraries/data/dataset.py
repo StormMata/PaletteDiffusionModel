@@ -192,8 +192,7 @@ def tensor_transforms(tensors, data_bounds):
         #print("dpyc:", x[4].min(), x[4].max())
         #print("dpys:", x[5].min(), x[5].max())
 
-    elif x.shape[0] == 2:
-        assert x.shape[0] == 2, f"tensor_transforms assumes 6 channel data! Shape of x is {x.shape}"
+    elif x.shape[0] in [2, 4]:
 
         # Rescale to [-1,1]
         umin, umax, vmin, vmax = data_bounds
@@ -218,7 +217,7 @@ def tensor_transforms(tensors, data_bounds):
         print("v:", x[1].min(), x[1].max())
 
     else:
-        raise ValueError(f"Expected 1, 2, 5, or 6 channel data, but got {x.shape[0]} channels")
+        raise ValueError(f"Expected 1, 2, 4, 5, or 6 channel data, but got {x.shape[0]} channels")
 
     return x, y
 
