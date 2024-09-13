@@ -230,7 +230,7 @@ class Palette(BaseModel):
                 u_xy_mask  = self.mask_image[:self.batch_size,0,:,:].cpu().float().numpy()
                 u_xy_pred  = self.visuals[-self.batch_size:,0,:,:].cpu().float().numpy()
                 fig_u_xy   = self.plot_cross_section_wandb(u_xy_input, u_xy_gt, u_xy_mask, u_xy_pred, self.batch_size)
-                wandb.log({'visual demo u_xy': fig_u_xy})
+                wandb.log({'u component': fig_u_xy})
                 plt.close(fig_u_xy)
 
                 if self.cond_image.shape[1] == 6:  # plot other variables if they are being reconstructed
@@ -387,7 +387,7 @@ class Palette(BaseModel):
 
         if batchsize > 1:
 
-            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*2, 8), dpi = 400)
+            fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*2.5, 8), dpi = 400)
 
             data3_plane      = data1_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
