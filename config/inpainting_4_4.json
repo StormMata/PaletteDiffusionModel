@@ -1,5 +1,5 @@
 {
-    "name":          "07",                                             // Experiment name
+    "name":          "08",                                             // Experiment name
     "wandb_project": "inpainting",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -25,7 +25,7 @@
                 "name": [           "data.dataset", 
                                     "InpaintDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/train_and_val.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/dim_time/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
                         "mask_mode": "bottom_4"
@@ -72,7 +72,7 @@
             "which_dataset": {
                 "name":             "InpaintDataset",             // import Dataset() class / function(not recommend) from default file
                 "args":{
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/test.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/dim_time/test.flist'",
                     "data_len":     -1,                                // Use full data set
                     "mask_config": {
                         "mask_mode": "bottom_4"
@@ -136,7 +136,8 @@
                         "channel_mults": [
                             1,
                             2,
-                            4
+                            4,
+                            8
                         ],
                         "attn_res": [
                             // 32,
@@ -180,7 +181,7 @@
     "train": { // arguments for basic training
         "n_epoch":               1e8, // max epochs, not limited now
         "n_iter":                1e8, // max interations
-        "val_epoch":              20, // valdation every specified number of epochs
+        "val_epoch":               5, // valdation every specified number of epochs
         "save_checkpoint_epoch":  50,
         "log_iter":              1e4, // log every specified number of iterations
         "tensorboard" :        false // tensorboardX enable
