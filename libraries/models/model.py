@@ -285,6 +285,24 @@ class Palette(BaseModel):
                     wandb.log({'visual demo v_xy': fig_v_xy})
                     plt.close(fig_v_xy)
 
+                elif self.cond_image.shape[1] == 3:
+                    v_xy_input = self.cond_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_gt    = self.gt_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_mask  = self.mask_image[:self.batch_size,1,:,:].cpu().float().numpy()
+                    v_xy_pred  = self.visuals[-self.batch_size:,1,:,:].cpu().float().numpy()
+                    fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_mask, v_xy_pred, self.batch_size)
+
+                    hpd_input  = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    hpd_gt     = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    hpd_mask   = self.mask_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    hpd_pred   = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
+                    fig_hpd    = self.plot_cross_section_wandb(hpd_input, hpd_gt, hpd_mask, hpd_pred, self.batch_size)
+
+                    wandb.log({'v component': fig_v_xy,
+                               'time': fig_hpd})
+                    plt.close(fig_v_xy)
+                    plt.close(fig_time)
+
                 elif self.cond_image.shape[1] == 4:
                     v_xy_input = self.cond_image[:self.batch_size,1,:,:].cpu().float().numpy()
                     v_xy_gt    = self.gt_image[:self.batch_size,1,:,:].cpu().float().numpy()
