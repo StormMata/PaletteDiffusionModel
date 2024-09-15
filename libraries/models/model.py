@@ -292,11 +292,11 @@ class Palette(BaseModel):
                     v_xy_pred  = self.visuals[-self.batch_size:,1,:,:].cpu().float().numpy()
                     fig_v_xy   = self.plot_cross_section_wandb(v_xy_input, v_xy_gt, v_xy_mask, v_xy_pred, self.batch_size)
 
-                    hpd_input  = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
-                    hpd_gt     = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
-                    hpd_mask   = self.mask_image[:self.batch_size,2,:,:].cpu().float().numpy()
-                    hpd_pred   = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
-                    fig_hpd    = self.plot_cross_section_wandb(hpd_input, hpd_gt, hpd_mask, hpd_pred, self.batch_size)
+                    time_input = self.cond_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    time_gt    = self.gt_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    time_mask  = self.mask_image[:self.batch_size,2,:,:].cpu().float().numpy()
+                    time_pred  = self.visuals[-self.batch_size:,2,:,:].cpu().float().numpy()
+                    fig_time   = self.plot_cross_section_wandb(time_input, time_gt, time_mask, time_pred, self.batch_size)
 
                     wandb.log({'v component': fig_v_xy,
                                'time': fig_time})
