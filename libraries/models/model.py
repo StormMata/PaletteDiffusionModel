@@ -299,7 +299,7 @@ class Palette(BaseModel):
                     fig_hpd    = self.plot_cross_section_wandb(hpd_input, hpd_gt, hpd_mask, hpd_pred, self.batch_size)
 
                     wandb.log({'v component': fig_v_xy,
-                               'time': fig_hpd})
+                               'time': fig_time})
                     plt.close(fig_v_xy)
                     plt.close(fig_time)
 
