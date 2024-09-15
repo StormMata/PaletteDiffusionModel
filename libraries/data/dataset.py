@@ -246,7 +246,7 @@ def tensor_transforms(tensors, data_bounds):
         assert x.shape[0] == 3, f"tensor_transforms assumes 3 channel data! Shape of x is {x.shape}"
 
         # Rescale to [-1,1]
-        umin, umax, vmin, vmax, hpdmin, hpdmax, dpymin, dpymax = data_bounds
+        umin, umax, vmin, vmax, hpdmin, hpdmax = data_bounds
 
         print("STORM DEBUGGING ON 3-CHANNEL DATA")
         print("min/max before scaling")
