@@ -118,8 +118,8 @@
                     "init_type": "kaiming", // method can be [normal | xavier| xavier_uniform | kaiming | orthogonal], default is kaiming
                     "module_name": "guided_diffusion", // sr3 | guided_diffusion
                     "unet": {
-                        "in_channel":      8,
-                        "out_channel":     4,
+                        "in_channel":      6,
+                        "out_channel":     3,
                         "inner_channel": 128,
                         "channel_mults": [
                             1,
