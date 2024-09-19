@@ -99,11 +99,13 @@ def normalize_dataset(tensors, data_bounds):
         # Rescale to [-1,1]
         umin, umax, vmin, vmax, hpdmin, hpdmax, dpymin, dpymax = data_bounds
 
+        print("\n")
+        print("---------------------------------------------------------------")
         print("min/max before scaling")
-        print("u:", x[0].min(), x[0].max())
-        print("v:", x[1].min(), x[1].max())
-        print("hpd:", x[2].min(), x[2].max())
-        print("dpy:", x[3].min(), x[3].max())
+        print(f"u:   {x[0].min():>8.5f} {x[0].max():>8.5f}")
+        print(f"v:   {x[1].min():>8.5f} {x[1].max():>8.5f}")
+        print(f"hpd: {x[2].min():>8.5f} {x[2].max():>8.5f}")
+        print(f"dpy: {x[3].min():>8.5f} {x[3].max():>8.5f}")
 
         x[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
         x[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
@@ -116,10 +118,11 @@ def normalize_dataset(tensors, data_bounds):
         y[3,:,:] = 2*(y[3,:,:] - dpymin)/(dpymax - dpymin) - 1
 
         print("min/max after scaling")
-        print("u:", x[0].min(), x[0].max())
-        print("v:", x[1].min(), x[1].max())
-        print("hpd:", x[2].min(), x[2].max())
-        print("dpy:", x[3].min(), x[3].max())
+        print(f"u:   {x[0].min():>8.5f} {x[0].max():>8.5f}")
+        print(f"v:   {x[1].min():>8.5f} {x[1].max():>8.5f}")
+        print(f"hpd: {x[2].min():>8.5f} {x[2].max():>8.5f}")
+        print(f"dpy: {x[3].min():>8.5f} {x[3].max():>8.5f}")
+        print("\n")
 
     else:
         raise ValueError(f"Expected 4-channel data, but got {x.shape[0]} channels")
@@ -628,6 +631,8 @@ class TestingDataset(data.Dataset):
         ret = {}
         path = self.imgs[index]
         _, img = self.tfs(self.loader(path), self.data_bounds)
+        print('GROUND TRUTH')
+        print(img.shape)
         mask = self.get_mask()
         cond_image = img*(1. - mask) + mask*torch.randn_like(img)
         mask_img = img*(1. - mask) + mask

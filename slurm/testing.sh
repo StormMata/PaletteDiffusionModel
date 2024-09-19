@@ -11,6 +11,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=storm@mit.edu
 #SBATCH --exclusive                # reserve entire node
+#SBATCH --qos=high
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 export MPICH_GPU_SUPPORT_ENABLED=1
