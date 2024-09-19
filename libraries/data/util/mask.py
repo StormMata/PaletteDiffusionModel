@@ -339,7 +339,6 @@ def brush_stroke_mask(img_shape,
 
     return mask
 
-
 # def random_irregular_mask(img_shape,
 #                           num_vertices=(4, 8),
 #                           max_angle=4,
