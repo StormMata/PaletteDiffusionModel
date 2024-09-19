@@ -337,6 +337,9 @@ def brush_stroke_mask(img_shape,
 
     mask = mask * out_channels
 
+    print('MAKING MASK')
+    print(mask.shape)
+
     return mask
 
 # def random_irregular_mask(img_shape,
