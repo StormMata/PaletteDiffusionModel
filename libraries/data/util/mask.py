@@ -229,6 +229,7 @@ def bbox2mask(img_shape, bbox, dtype='uint8'):
     return mask
 
 def brush_stroke_mask(img_shape,
+                      out_channels,
                       num_vertices = (4, 12),
                       mean_angle   = 2 * math.pi / 5,
                       angle_range  = 2 * math.pi / 15,
@@ -331,6 +332,11 @@ def brush_stroke_mask(img_shape,
         mask.transpose(Image.FLIP_TOP_BOTTOM)
     mask = np.array(mask).astype(dtype=getattr(np, dtype))
     mask = mask[:, :, None]
+
+    mask = np.repeat(mask, len(out_channels), axis=2)
+
+    mask = mask * out_channels
+
     return mask
 
 

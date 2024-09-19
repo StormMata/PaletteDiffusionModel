@@ -23,29 +23,37 @@
         "train": { 
             "which_dataset": {                                         // import designated dataset using arguments 
                 "name": [           "data.dataset", 
-                                    "InpaintDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
+                                    "TestingDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
-                        "mask_mode": "bottom_4"
+                        "mask_mode": "brush"
                     },
                     "data_bounds": [
-                                    -14.145477391842705,
-                                    25.55866949139715,
-                                    -20.310099955027688,
-                                    27.949959019988107,
-                                    0,
-                                    0
-        ],
-        "image_size": [
+                        -14.145477391842705,
+                        19.54227990769679,
+                        -19.78571972397009,
+                        26.711608912332057,
+                        0,
+                        23,
+                        1,
+                        365
+                    ],
+                    "out_channels": [
+                        1,
+                        1,
+                        0,
+                        0
+                    ],
+                    "image_size": [
                         96,
-                        200
+                        50
         ]
     } 
 },
             "dataloader":{
-                "validation_split": 509,                               // percent or number 
+                "validation_split": 506,                               // percent or number 
                 "args":{                                               // arguments to initialize train_dataloader
                     "batch_size":   32,                                // batch size in each gpu
                     "num_workers":  8,                                 // Same as number of GPUs?
@@ -64,24 +72,32 @@
         },
         "test": {                                                      // TEST SETTINGS
             "which_dataset": {
-                "name":             "InpaintDataset",             // import Dataset() class / function(not recommend) from default file
+                "name":             "TestingDataset",             // import Dataset() class / function(not recommend) from default file
                 "args":{
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/test.flist",
                     "data_len":     -1,                                // Use full data set
                     "mask_config": {
-                        "mask_mode": "bottom_4"
+                        "mask_mode": "brush"
                     },
                     "data_bounds": [
-                                    -14.145477391842705,
-                                    25.55866949139715,
-                                    -20.310099955027688,
-                                    27.949959019988107,
-                                    0,
-                                    0
+                        -14.145477391842705,
+                        19.54227990769679,
+                        -19.78571972397009,
+                        26.711608912332057,
+                        0,
+                        23,
+                        1,
+                        365
+                    ],
+                    "out_channels": [
+                        1,
+                        1,
+                        0,
+                        0
                     ],
                     "image_size": [
                         96,
-                        200
+                        50
                                   ]     
                 }
             },
@@ -118,8 +134,8 @@
                     "init_type": "kaiming", // method can be [normal | xavier| xavier_uniform | kaiming | orthogonal], default is kaiming
                     "module_name": "guided_diffusion", // sr3 | guided_diffusion
                     "unet": {
-                        "in_channel":      6,
-                        "out_channel":     3,
+                        "in_channel":      8,
+                        "out_channel":     4,
                         "inner_channel": 128,
                         "channel_mults": [
                             1,
@@ -137,7 +153,7 @@
                         "dropout":    0.2,
                         "image_size": [
                             96, 
-                            200
+                            50
                         ]
                     },
                     "beta_schedule": {

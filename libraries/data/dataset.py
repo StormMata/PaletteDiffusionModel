@@ -86,6 +86,46 @@ def numpy_transforms(arr, data_bounds):
 
     return arr
 
+def normalize_dataset(tensors, data_bounds):
+
+    print("Normalizing data...")
+
+    x = tensors['x']
+    y = tensors['y']
+
+    if x.shape[0] == 4:
+        assert x.shape[0] == 4, f"normalize_dataset() expects 4-channel data! Shape of x is {x.shape}"
+
+        # Rescale to [-1,1]
+        umin, umax, vmin, vmax, hpdmin, hpdmax, dpymin, dpymax = data_bounds
+
+        print("min/max before scaling")
+        print("u:", x[0].min(), x[0].max())
+        print("v:", x[1].min(), x[1].max())
+        print("hpd:", x[2].min(), x[2].max())
+        print("dpy:", x[3].min(), x[3].max())
+
+        x[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
+        x[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
+        x[2,:,:] = 2*(x[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
+        x[3,:,:] = 2*(x[3,:,:] - dpymin)/(dpymax - dpymin) - 1
+
+        y[0,:,:] = 2*(y[0,:,:] - umin)/(umax - umin) - 1
+        y[1,:,:] = 2*(y[1,:,:] - vmin)/(vmax - vmin) - 1
+        y[2,:,:] = 2*(y[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
+        y[3,:,:] = 2*(y[3,:,:] - dpymin)/(dpymax - dpymin) - 1
+
+        print("min/max after scaling")
+        print("u:", x[0].min(), x[0].max())
+        print("v:", x[1].min(), x[1].max())
+        print("hpd:", x[2].min(), x[2].max())
+        print("dpy:", x[3].min(), x[3].max())
+
+    else:
+        raise ValueError(f"Expected 4-channel data, but got {x.shape[0]} channels")
+
+    return x, y
+
 def tensor_transforms(tensors, data_bounds):
     '''
     Same as numpy_transforms, except for when you're loading
@@ -567,3 +607,46 @@ class InpaintProfiles(data.Dataset):
 
     def __len__(self):
         return len(self.imgs)
+    
+
+class TestingDataset(data.Dataset):
+    def __init__(self, data_root, data_len, mask_config, data_bounds, image_size, out_channels, loader=pytorch_loader):
+        imgs = make_dataset(data_root, filetype='tensor')  # Refer to samples as "imgs" for simplicity's sake
+        if data_len > 0:
+            self.imgs = imgs[:int(data_len)]
+        else:
+            self.imgs = imgs
+        self.tfs          = normalize_dataset
+        self.loader       = loader
+        self.data_bounds  = data_bounds
+        self.image_size   = image_size
+        self.out_channels = out_channels
+        self.mask_config  = mask_config
+        self.mask_mode    = self.mask_config['mask_mode']
+
+    def __getitem__(self, index):
+        ret = {}
+        path = self.imgs[index]
+        _, img = self.tfs(self.loader(path), self.data_bounds)
+        mask = self.get_mask()
+        cond_image = img*(1. - mask) + mask*torch.randn_like(img)
+        mask_img = img*(1. - mask) + mask
+
+        ret['gt_image']   = img
+        ret['cond_image'] = cond_image
+        ret['mask_image'] = mask_img
+        ret['mask'] = mask
+        ret['path'] = path.rsplit("/")[-1].rsplit("\\")[-1]
+        return ret
+
+    def __len__(self):
+        return len(self.imgs)
+
+    def get_mask(self):
+        if self.mask_mode == 'brush':
+            mask = bbox2mask(self.image_size, self.mask_config['shape'])
+        elif self.mask_mode == 'bottom_4':
+            mask = bottom_mask_4(self.image_size)
+        elif self.mask_mode == 'bottom_10':
+            mask = bottom_mask_10(self.image_size)
+        return torch.from_numpy(mask).permute(2,0,1)
