@@ -644,7 +644,7 @@ class TestingDataset(data.Dataset):
 
     def get_mask(self):
         if self.mask_mode == 'brush':
-            mask = bbox2mask(self.image_size, self.mask_config['shape'])
+            mask = brush_stroke_mask(self.image_size, self.out_channels)
         elif self.mask_mode == 'bottom_4':
             mask = bottom_mask_4(self.image_size)
         elif self.mask_mode == 'bottom_10':
