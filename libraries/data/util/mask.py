@@ -335,6 +335,8 @@ def brush_stroke_mask(img_shape,
 
     mask = np.repeat(mask, len(out_channels), axis=2)
 
+    mask = mask.permute(2, 0, 1)
+
     mask = mask * out_channels
 
     print('MAKING MASK')
