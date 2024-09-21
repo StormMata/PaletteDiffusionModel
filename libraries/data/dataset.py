@@ -391,6 +391,8 @@ class InpaintDataset(data.Dataset):
         # img = self.tfs(self.loader(path))
         _, img = self.tfs(self.loader(path), self.data_bounds)
         mask = self.get_mask()
+        print('MASK SHAPE')
+
         cond_image = img*(1. - mask) + mask*torch.randn_like(img)
         mask_img = img*(1. - mask) + mask
 
@@ -631,9 +633,9 @@ class TestingDataset(data.Dataset):
         ret = {}
         path = self.imgs[index]
         _, img = self.tfs(self.loader(path), self.data_bounds)
-        print('GROUND TRUTH')
-        print(img.shape)
+        print('GROUND TRUTH SHAPE: {img.shape}')
         mask = self.get_mask()
+        print('MASK SHAPE: {mask.shape}')
         cond_image = img*(1. - mask) + mask*torch.randn_like(img)
         mask_img = img*(1. - mask) + mask
 
