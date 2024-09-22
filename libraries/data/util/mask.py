@@ -2,6 +2,7 @@
 import math
 
 # import cv2
+import random
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -501,3 +502,53 @@ def get_custom_mask(img_shape, mask_dir, dtype='uint8'):
         assert mask.shape[2] == depth
 
     return mask
+
+def blob_mask(img_shape, out_channels):
+    img_h, img_w = img_shape[:2]
+    total_pixels = img_h * img_w
+    
+    # Set minimum and maximum mask area
+    min_area = 0.10 * total_pixels  # 10% of the image size
+    max_area = 0.33 * total_pixels  # 33% of the image size
+    
+    # Create a blank mask
+    mask = Image.new('L', (img_w, img_h), 0)
+    draw = ImageDraw.Draw(mask)
+    
+    # Create a random number of vertices for the blob
+    num_vertices = np.random.randint(3, 10)
+    
+    # Generate random vertices
+    vertices = []
+    for _ in range(num_vertices):
+        x = np.random.randint(0, img_w)
+        y = np.random.randint(0, img_h)
+        vertices.append((x, y))
+    
+    # Draw the irregular polygon on the mask
+    draw.polygon(vertices, fill=1)
+
+    # Convert to numpy array
+    mask_np = np.array(mask).astype(np.float32)
+    
+    # Calculate the current mask area
+    mask_area = np.sum(mask_np)
+    
+    # Ensure mask area is within the required range
+    if mask_area < min_area or mask_area > max_area:
+        scale_factor = np.sqrt(min_area / mask_area)
+        mask = mask.resize((int(img_w * scale_factor), int(img_h * scale_factor)), resample=Image.BILINEAR)
+        mask = mask.resize((img_w, img_h), resample=Image.BILINEAR)
+        mask_np = np.array(mask).astype(np.float32)
+    
+    # Add an extra dimension for channels
+    mask_np = mask_np[:, :, None]
+    
+    # Repeat the mask to match the number of channels
+    mask_np = np.repeat(mask_np, len(out_channels), axis=2)
+    
+    # Apply mask only where out_channels is 1
+    out_channels = np.array(out_channels).reshape(1, 1, len(out_channels))
+    mask_np = mask_np * out_channels
+
+    return mask_np
