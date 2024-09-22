@@ -636,9 +636,9 @@ class TestingDataset(data.Dataset):
         ret = {}
         path = self.imgs[index]
         _, img = self.tfs(self.loader(path), self.data_bounds)
-        print(f'GROUND TRUTH SHAPE: {img.shape}',flush=True)
+        # print(f'GROUND TRUTH SHAPE: {img.shape}',flush=True)
         mask = self.get_mask()
-        print(f'MASK SHAPE: {mask.shape}',flush=True)
+        # print(f'MASK SHAPE: {mask.shape}',flush=True)
         cond_image = img*(1. - mask) + mask*torch.randn_like(img)
         mask_img = img*(1. - mask) + mask
 
