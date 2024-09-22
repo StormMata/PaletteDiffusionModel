@@ -1,5 +1,5 @@
 {
-    "name":          "11",                                             // Experiment name
+    "name":          "12",                                             // Experiment name
     "wandb_project": "inpainting",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -28,7 +28,7 @@
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/uvt/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
-                        "mask_mode": "bottom_4"
+                        "mask_mode": "brush"
                     },
                     "data_bounds": [
                                     -14.145477391842705,
@@ -69,7 +69,7 @@
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/uvt/test.flist",
                     "data_len":     -1,                                // Use full data set
                     "mask_config": {
-                        "mask_mode": "bottom_4"
+                        "mask_mode": "brush"
                     },
                     "data_bounds": [
                                     -14.145477391842705,

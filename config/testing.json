@@ -49,9 +49,9 @@
                     "image_size": [
                         96,
                         56
-        ]
-    } 
-},
+                    ]
+                 } 
+                },
             "dataloader":{
                 "validation_split": 506,                               // percent or number 
                 "args":{                                               // arguments to initialize train_dataloader
