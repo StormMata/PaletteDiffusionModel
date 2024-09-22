@@ -28,7 +28,7 @@
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
-                        "mask_mode": "brush"
+                        "mask_mode": "brush_stroke_mask"
                     },
                     "data_bounds": [
                         -14.145477391842705,
@@ -77,7 +77,7 @@
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/test.flist",
                     "data_len":     -1,                                // Use full data set
                     "mask_config": {
-                        "mask_mode": "brush"
+                        "mask_mode": "brush_stroke_mask"
                     },
                     "data_bounds": [
                         -14.145477391842705,
