@@ -516,7 +516,7 @@ def blob_mask(img_shape, out_channels, dtype='uint8'):
     draw = ImageDraw.Draw(mask)
     
     # Create a random number of vertices for the blob
-    num_vertices = np.random.randint(3, 10)
+    num_vertices = np.random.randint(4, 12)
     
     # Generate random vertices
     vertices = []
