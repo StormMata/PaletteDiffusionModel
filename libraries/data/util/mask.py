@@ -503,7 +503,7 @@ def get_custom_mask(img_shape, mask_dir, dtype='uint8'):
 
     return mask
 
-def blob_mask(img_shape, out_channels):
+def blob_mask(img_shape, out_channels, dtype='uint8'):
     img_h, img_w = img_shape[:2]
     total_pixels = img_h * img_w
     
@@ -529,7 +529,7 @@ def blob_mask(img_shape, out_channels):
     draw.polygon(vertices, fill=1)
 
     # Convert to numpy array
-    mask_np = np.array(mask).astype(np.float32)
+    mask_np = np.array(mask).astype(dtype)
     
     # Calculate the current mask area
     mask_area = np.sum(mask_np)
@@ -539,7 +539,7 @@ def blob_mask(img_shape, out_channels):
         scale_factor = np.sqrt(min_area / mask_area)
         mask = mask.resize((int(img_w * scale_factor), int(img_h * scale_factor)), resample=Image.BILINEAR)
         mask = mask.resize((img_w, img_h), resample=Image.BILINEAR)
-        mask_np = np.array(mask).astype(np.float32)
+        mask_np = np.array(mask).astype(dtype)
     
     # Add an extra dimension for channels
     mask_np = mask_np[:, :, None]
