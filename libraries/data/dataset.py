@@ -519,7 +519,7 @@ class ColorizationDataset(data.Dataset):
         return len(self.flist)
 
 class LidarImg2ImgDataset(data.Dataset):
-    def __init__(self, data_root, data_len, mask_config, data_bounds, image_size, loader=pytorch_loader):
+    def __init__(self, data_root, data_len, mask_config, data_bounds, image_size, out_channels, loader=pytorch_loader):
         imgs = make_dataset(data_root, filetype='tensor')  # Refer to samples as "imgs" for simplicity's sake
         if data_len > 0:
             self.imgs = imgs[:int(data_len)]
@@ -530,6 +530,7 @@ class LidarImg2ImgDataset(data.Dataset):
         self.data_bounds = data_bounds
         self.image_size  = image_size
         self.mask_config = mask_config
+        self.out_channels = out_channels
         self.mask_mode   = self.mask_config['mask_mode']
     
 
