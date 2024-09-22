@@ -99,6 +99,9 @@ def normalize_dataset(tensors, data_bounds):
         # Rescale to [-1,1]
         umin, umax, vmin, vmax, hpdmin, hpdmax, dpymin, dpymax = data_bounds
 
+        x_norm = np.empty_like(x)
+        y_norm = np.empty_like(y)
+
         print("\n")
         print("---------------------------------------------------------------")
         print("min/max before scaling")
@@ -107,27 +110,27 @@ def normalize_dataset(tensors, data_bounds):
         print(f"hpd: {x[2].min():>8.5f} {x[2].max():>8.5f}")
         print(f"dpy: {x[3].min():>8.5f} {x[3].max():>8.5f}")
 
-        x[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
-        x[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
-        x[2,:,:] = 2*(x[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
-        x[3,:,:] = 2*(x[3,:,:] - dpymin)/(dpymax - dpymin) - 1
+        x_norm[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
+        x_norm[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
+        x_norm[2,:,:] = 2*(x[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
+        x_norm[3,:,:] = 2*(x[3,:,:] - dpymin)/(dpymax - dpymin) - 1
 
-        y[0,:,:] = 2*(y[0,:,:] - umin)/(umax - umin) - 1
-        y[1,:,:] = 2*(y[1,:,:] - vmin)/(vmax - vmin) - 1
-        y[2,:,:] = 2*(y[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
-        y[3,:,:] = 2*(y[3,:,:] - dpymin)/(dpymax - dpymin) - 1
+        y_norm[0,:,:] = 2*(y[0,:,:] - umin)/(umax - umin) - 1
+        y_norm[1,:,:] = 2*(y[1,:,:] - vmin)/(vmax - vmin) - 1
+        y_norm[2,:,:] = 2*(y[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
+        y_norm[3,:,:] = 2*(y[3,:,:] - dpymin)/(dpymax - dpymin) - 1
 
         print("\nmin/max after scaling")
-        print(f"u:   {x[0].min():>8.5f} {x[0].max():>8.5f}")
-        print(f"v:   {x[1].min():>8.5f} {x[1].max():>8.5f}")
-        print(f"hpd: {x[2].min():>8.5f} {x[2].max():>8.5f}")
-        print(f"dpy: {x[3].min():>8.5f} {x[3].max():>8.5f}")
+        print(f"u:   {x_norm[0].min():>8.5f} {x_norm[0].max():>8.5f}")
+        print(f"v:   {x_norm[1].min():>8.5f} {x_norm[1].max():>8.5f}")
+        print(f"hpd: {x_norm[2].min():>8.5f} {x_norm[2].max():>8.5f}")
+        print(f"dpy: {x_norm[3].min():>8.5f} {x_norm[3].max():>8.5f}")
         print("\n")
 
     else:
         raise ValueError(f"Expected 4-channel data, but got {x.shape[0]} channels")
 
-    return x, y
+    return x_norm, y_norm
 
 def tensor_transforms(tensors, data_bounds):
     '''
