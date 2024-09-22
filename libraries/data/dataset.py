@@ -543,20 +543,23 @@ class LidarImg2ImgDataset(data.Dataset):
         # mask_img = y * (1. - mask) + mask
 
         # Expand mask to match the shape of y
-        mask_expanded = mask.expand(y.shape)  # mask_expanded will have shape [6, 96, 200]
+        # mask_expanded = mask.expand(y.shape)  # mask_expanded will have shape [6, 96, 200]
         # mask_expanded = mask
 
 
         # Now you can safely perform operations between y and mask_expanded
-        mask_img = y * (1. - mask_expanded) + mask_expanded
-        cond_image = y*(1. - mask_expanded) + mask_expanded*torch.randn_like(y)
+        # mask_img = y * (1. - mask_expanded) + mask_expanded
+        # cond_image = y*(1. - mask_expanded) + mask_expanded*torch.randn_like(y)
+
+        mask_img = y * (1. - mask) + mask
+        cond_image = y*(1. - mask) + mask*torch.randn_like(y)
 
         # mask_img = x * mask
 
         ret['gt_image']   = y
         ret['cond_image'] = cond_image
         ret['mask_image'] = mask_img
-        ret['mask'] = mask_expanded
+        ret['mask'] = mask
         ret['path'] = path.rsplit("/")[-1].rsplit("\\")[-1]
         # raise NotImplementedError('Terminated here.')
         return ret
@@ -565,7 +568,9 @@ class LidarImg2ImgDataset(data.Dataset):
         return len(self.imgs)
 
     def get_mask(self):
-        if self.mask_mode == 'bottom':
+        if self.mask_mode == 'brush':
+            mask = brush_stroke_mask(self.image_size, self.out_channels)
+        elif self.mask_mode == 'bottom':
             mask = bottom_mask(self.image_size)
         return torch.from_numpy(mask).permute(2,0,1)
     
