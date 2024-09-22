@@ -99,8 +99,8 @@ def normalize_dataset(tensors, data_bounds):
         # Rescale to [-1,1]
         umin, umax, vmin, vmax, hpdmin, hpdmax, dpymin, dpymax = data_bounds
 
-        x_norm = np.empty_like(x)
-        y_norm = np.empty_like(y)
+        x_norm = torch.empty_like(x)  # If x is already a tensor
+        y_norm = torch.empty_like(y)  # If y is already a tensor
 
         print("\n")
         print("---------------------------------------------------------------")
