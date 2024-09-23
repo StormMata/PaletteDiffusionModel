@@ -25,7 +25,7 @@
                 "name": [           "data.dataset", 
                                     "TestingDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/train_and_val.flist",,
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
                         "mask_mode": "brush"
