@@ -1,5 +1,5 @@
 {
-    "name":          "21",                                             // Experiment name
+    "name":          "22",                                             // Experiment name
     "wandb_project": "inpainting",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -185,7 +185,7 @@
     "train": { // arguments for basic training
         "n_epoch":               1e8, // max epochs, not limited now
         "n_iter":                1e8, // max interations
-        "val_epoch":              20, // valdation every specified number of epochs
+        "val_epoch":              10, // valdation every specified number of epochs
         "save_checkpoint_epoch":  50,
         "log_iter":              1e4, // log every specified number of iterations
         "tensorboard" :        false // tensorboardX enable
