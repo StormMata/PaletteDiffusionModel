@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J mask_test                # job name
+#SBATCH -J val_25                # job name
 #SBATCH --nodes=1                  #
 #SBATCH --time=0-01:00:00          # set time limit
 #SBATCH --partition=gpu-h100      # GPU partition
