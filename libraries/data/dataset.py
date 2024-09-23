@@ -5,7 +5,7 @@ import torch.utils.data as data
 
 from PIL import Image
 from torchvision import transforms
-from .util.mask import (blob_mask, bottom_mask_half, bottom_mask_4, bottom_mask_10, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
+from .util.mask import (bottom_mask_456, blob_mask, bottom_mask_half, bottom_mask_4, bottom_mask_10, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
@@ -663,6 +663,8 @@ class TestingDataset(data.Dataset):
             mask = brush_stroke_mask(self.image_size, self.out_channels)
         elif self.mask_mode == 'bottom_4':
             mask = bottom_mask_4(self.image_size)
+        elif self.mask_mode == 'bottom_456':
+            mask = bottom_mask_456(self.image_size)
         elif self.mask_mode == 'bottom_10':
             mask = bottom_mask_10(self.image_size)
         elif self.mask_mode == 'bottom_mask_half':

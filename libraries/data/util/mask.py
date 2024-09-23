@@ -69,6 +69,41 @@ def bottom_mask_4(img_shape, dtype='uint8'):
 
     return mask
 
+def bottom_mask_456(img_shape, dtype='uint8'):
+    """Generate mask in ndarray from bbox.
+
+    The returned mask has the shape of (h, w, 1). '1' indicates the
+    hole and '0' indicates the valid regions.
+
+    We prefer to use `uint8` as the data type of masks, which may be different
+    from other codes in the community.
+
+    Args:
+        img_shape (tuple[int]): The size of the image.
+        bbox (tuple[int]): Configuration tuple, (top, left, height, width)
+        dtype (str): Indicate the data type of returned masks. Default: 'uint8'
+
+    Return:
+        numpy.ndarray: Mask in the shape of (h, w, 1).
+    """
+
+    sector_id = np.random.randint(1, 5)
+
+    height, width = img_shape[:2]
+
+    mask = np.zeros((height, width, 1), dtype=dtype)
+
+    if sector_id == 1:
+        mask[0:height, 0:14, :] = 1
+    elif sector_id == 2:
+        mask[0:height, 14:28, :] = 1
+    elif sector_id == 3:
+        mask[0:height, 28:42, :] = 1
+    elif sector_id == 4:
+        mask[0:height, 42:56, :] = 1
+
+    return mask
+
 def bottom_mask_10(img_shape, dtype='uint8'):
     """Generate mask in ndarray from bbox.
 
