@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J real_10                # job name
+#SBATCH -J real_05                # job name
 #SBATCH --nodes=1                  #
 #SBATCH --time=0-12:00:00          # set time limit
 #SBATCH --partition=gpu-h100      # GPU partition
