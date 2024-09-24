@@ -671,7 +671,7 @@ def circle_mask(img_shape, out_channels, dtype='uint8'):
 
     return mask_np
 
-def irregular_new(img_shape, out_channels, dtype='uint8'):
+def irregular_mask(img_shape, out_channels, dtype='uint8'):
     """Generate an irregularly shaped mask.
 
     The returned mask has the shape of (h, w, c), where c is the number of channels 

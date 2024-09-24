@@ -5,7 +5,7 @@ import torch.utils.data as data
 
 from PIL import Image
 from torchvision import transforms
-from .util.mask import (irregular_new, smooth_blob, bottom_mask_456, circle_mask, bottom_mask_half, bottom_mask_4, bottom_mask_10, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
+from .util.mask import (irregular_mask, bottom_mask_456, circle_mask, bottom_mask_half, bottom_mask_4, bottom_mask_10, bbox2mask, brush_stroke_mask, get_irregular_mask, random_bbox, random_cropping_bbox)
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
@@ -621,7 +621,6 @@ class InpaintProfiles(data.Dataset):
     def __len__(self):
         return len(self.imgs)
     
-
 class TestingDataset(data.Dataset):
     def __init__(self, data_root, data_len, mask_config, data_bounds, image_size, out_channels, loader=pytorch_loader):
         imgs = make_dataset(data_root, filetype='tensor')  # Refer to samples as "imgs" for simplicity's sake
@@ -660,10 +659,8 @@ class TestingDataset(data.Dataset):
     def get_mask(self):
         if self.mask_mode == 'brush':
             mask = brush_stroke_mask(self.image_size, self.out_channels)
-        if self.mask_mode == 'smooth_blob':
-            mask = smooth_blob(self.image_size, self.out_channels)
-        if self.mask_mode == 'irregular_blob':
-            mask = irregular_new(self.image_size, self.out_channels)
+        if self.mask_mode == 'irregular_mask':
+            mask = irregular_mask(self.image_size, self.out_channels)
         elif self.mask_mode == 'bottom_4':
             mask = bottom_mask_4(self.image_size)
         elif self.mask_mode == 'bottom_456':
@@ -672,6 +669,6 @@ class TestingDataset(data.Dataset):
             mask = bottom_mask_10(self.image_size)
         elif self.mask_mode == 'bottom_mask_half':
             mask = bottom_mask_half(self.image_size)
-        elif self.mask_mode == 'blob_mask':
+        elif self.mask_mode == 'circle_mask':
             mask = circle_mask(self.image_size, self.out_channels)
         return torch.from_numpy(mask).permute(2,0,1)

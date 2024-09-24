@@ -28,7 +28,7 @@
                     "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/new_testing/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
-                        "mask_mode": "irregular_blob"
+                        "mask_mode": "irregular_mask"
                     },
                     "data_bounds": [
                         -14.145477391842705,
