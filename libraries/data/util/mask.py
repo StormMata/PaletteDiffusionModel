@@ -657,44 +657,52 @@ def blob_mask_new(img_shape, out_channels, dtype='uint8'):
     
     # Create a larger blank canvas (50% larger in each dimension to allow the blob to exceed borders)
     canvas_w, canvas_h = int(img_w * 1.5), int(img_h * 1.5)
-    mask = Image.new('L', (canvas_w, canvas_h), 0)
-    draw = ImageDraw.Draw(mask)
     
-    # Generate a random number of vertices for an irregular blob
-    num_vertices = np.random.randint(6, 12)  # More vertices for a more irregular shape
-    vertices = []
+    mask_np = np.zeros((canvas_h, canvas_w), dtype=dtype)
+    mask_area = 0
     
-    # Create random vertices in the larger canvas
-    for _ in range(num_vertices):
-        x = np.random.randint(0, canvas_w)
-        y = np.random.randint(0, canvas_h)
-        vertices.append((x, y))
-    
-    # Draw the irregular polygon (blob) on the larger canvas
-    draw.polygon(vertices, fill=1)
-    
-    # Apply a Gaussian blur to smooth the edges
-    mask = mask.filter(ImageFilter.GaussianBlur(radius=20))  # Larger blur for smoother edges
-    
-    # Convert to numpy array and crop the mask to the original image size
-    mask_np = np.array(mask).astype(dtype)
-    
-    # Crop the mask to match the image size
-    mask_np = mask_np[:img_h, :img_w]
-    
-    # Calculate the current mask area
-    mask_area = np.sum(mask_np > 0)
-    
-    # Ensure mask area is within the required range by resizing if necessary
-    if mask_area < min_area or mask_area > max_area:
-        scale_factor = np.sqrt(min_area / mask_area) if mask_area < min_area else np.sqrt(max_area / mask_area)
-        new_w = int(canvas_w * scale_factor)
-        new_h = int(canvas_h * scale_factor)
+    # Keep generating a blob until the mask area is non-zero and meets the criteria
+    while mask_area == 0 or mask_area < min_area or mask_area > max_area:
+        mask = Image.new('L', (canvas_w, canvas_h), 0)
+        draw = ImageDraw.Draw(mask)
         
-        # Resize the mask
-        mask = mask.resize((new_w, new_h), resample=Image.BILINEAR)
-        mask = mask.resize((img_w, img_h), resample=Image.BILINEAR)
+        # Generate a random number of vertices for an irregular blob
+        num_vertices = np.random.randint(6, 12)  # More vertices for a more irregular shape
+        vertices = []
+        
+        # Create random vertices in the larger canvas
+        for _ in range(num_vertices):
+            x = np.random.randint(0, canvas_w)
+            y = np.random.randint(0, canvas_h)
+            vertices.append((x, y))
+        
+        # Draw the irregular polygon (blob) on the larger canvas
+        draw.polygon(vertices, fill=1)
+        
+        # Apply a Gaussian blur to smooth the edges
+        mask = mask.filter(ImageFilter.GaussianBlur(radius=20))  # Larger blur for smoother edges
+        
+        # Convert to numpy array
         mask_np = np.array(mask).astype(dtype)
+        
+        # Crop the mask to match the image size
+        mask_np = mask_np[:img_h, :img_w]
+        
+        # Calculate the current mask area
+        mask_area = np.sum(mask_np > 0)
+        
+        # Prevent infinite loop if it's hard to generate a valid blob
+        if mask_area > 0 and (mask_area < min_area or mask_area > max_area):
+            scale_factor = np.sqrt(min_area / mask_area) if mask_area < min_area else np.sqrt(max_area / mask_area)
+            scale_factor = max(min(scale_factor, 1.5), 0.5)  # Limit the scale factor to avoid extreme resizes
+            new_w = int(canvas_w * scale_factor)
+            new_h = int(canvas_h * scale_factor)
+            
+            # Resize the mask
+            mask = mask.resize((new_w, new_h), resample=Image.BILINEAR)
+            mask = mask.resize((img_w, img_h), resample=Image.BILINEAR)
+            mask_np = np.array(mask).astype(dtype)
+            break  # Break the loop once the blob is resized appropriately
     
     # Add an extra dimension for channels
     mask_np = mask_np[:, :, None]
