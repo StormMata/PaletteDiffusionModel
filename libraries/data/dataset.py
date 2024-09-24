@@ -104,7 +104,7 @@ def normalize_dataset(tensors, data_bounds):
 
         print("\n")
         print("---------------------------------------------------------------")
-        print("min/max before scaling")
+        print("min/max BEFORE scaling:\n")
         print(f"u:   {x[0].min():>8.5f} {x[0].max():>8.5f}")
         print(f"v:   {x[1].min():>8.5f} {x[1].max():>8.5f}")
         print(f"hpd: {x[2].min():>8.5f} {x[2].max():>8.5f}")
@@ -120,7 +120,7 @@ def normalize_dataset(tensors, data_bounds):
         y_norm[2,:,:] = 2*(y[2,:,:] - hpdmin)/(hpdmax - hpdmin) - 1
         y_norm[3,:,:] = 2*(y[3,:,:] - dpymin)/(dpymax - dpymin) - 1
 
-        print("\nmin/max after scaling")
+        print("\nmin/max AFTER scaling:\n")
         print(f"u:   {x_norm[0].min():>8.5f} {x_norm[0].max():>8.5f}")
         print(f"v:   {x_norm[1].min():>8.5f} {x_norm[1].max():>8.5f}")
         print(f"hpd: {x_norm[2].min():>8.5f} {x_norm[2].max():>8.5f}")

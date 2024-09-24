@@ -1,5 +1,5 @@
 {
-    "name":          "26",                                             // Experiment name
+    "name":          "28",                                             // Experiment name
     "wandb_project": "inpainting",                                      // Weights and Biases experiment name (why is this different)
     "gpu_ids":       [0,
                       1,
@@ -25,7 +25,7 @@
                 "name": [           "data.dataset", 
                                     "TestingDataset"],            // import Dataset() class / function(not recommend) from data.dataset.py (default is [data.dataset.py])
                 "args":{                                               // arguments to initialize dataset
-                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/testing/train_and_val.flist",
+                    "data_root":    "/scratch/smata/PaletteDiffusionModel/data/flist/new_testing/train_and_val.flist",
                     "data_len":     -1,                                // Full dataset?+
                     "mask_config": {
                         "mask_mode": "brush"
@@ -53,7 +53,7 @@
     } 
 },
             "dataloader":{
-                "validation_split": 506,                               // percent or number 
+                "validation_split": 373,                               // percent or number 
                 "args":{                                               // arguments to initialize train_dataloader
                     "batch_size":   32,                                // batch size in each gpu
                     "num_workers":  4,                                 // Same as number of GPUs?
