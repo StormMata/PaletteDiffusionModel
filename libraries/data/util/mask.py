@@ -729,7 +729,7 @@ def irregular_mask(img_shape, out_channels, dtype='uint8'):
         draw.polygon(vertices, fill=1)
         
         # Apply a Gaussian blur to smooth the edges
-        mask = mask.filter(ImageFilter.GaussianBlur(radius=5))  # Larger blur for smoother edges
+        mask = mask.filter(ImageFilter.GaussianBlur(radius=11))  # Larger blur for smoother edges
         
         # Convert to numpy array
         mask_np = np.array(mask).astype(dtype)
