@@ -69,7 +69,7 @@ def bottom_mask_4(img_shape, dtype='uint8'):
 
     return mask
 
-def bottom_mask_456(img_shape, dtype='uint8'):
+def bottom_mask_456(img_shape, out_channels, dtype='uint8'):
     """Generate mask in ndarray from bbox.
 
     The returned mask has the shape of (h, w, 1). '1' indicates the
@@ -101,6 +101,9 @@ def bottom_mask_456(img_shape, dtype='uint8'):
         mask[0:height, 28:42, :] = 1
     elif sector_id == 4:
         mask[0:height, 42:56, :] = 1
+
+    out_channels = np.array(out_channels).reshape(1, 1, len(out_channels))
+    mask = mask * out_channels
 
     return mask
 
