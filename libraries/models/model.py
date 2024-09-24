@@ -407,7 +407,7 @@ class Palette(BaseModel):
 
             fig, ax = plt.subplots(5, batchsize, sharex = True, sharey = True, figsize = (batchsize*2.5, 8), dpi = 400)
 
-            data3_plane      = data1_plane - data0_plane
+            data3_plane      = data2_plane - data0_plane
             pltmin, pltmax   = data0_plane.min(), data0_plane.max()
             pltmin3, pltmax3 = data3_plane.min(), data3_plane.max()
 
