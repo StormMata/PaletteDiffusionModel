@@ -102,13 +102,11 @@ def normalize_dataset(tensors, data_bounds):
         x_norm = torch.empty_like(x)  # If x is already a tensor
         y_norm = torch.empty_like(y)  # If y is already a tensor
 
-        print("\n")
-        print("---------------------------------------------------------------")
-        print("min/max BEFORE scaling:\n")
-        print(f"u:   {x[0].min():>8.5f} {x[0].max():>8.5f}")
-        print(f"v:   {x[1].min():>8.5f} {x[1].max():>8.5f}")
-        print(f"hpd: {x[2].min():>8.5f} {x[2].max():>8.5f}")
-        print(f"dpy: {x[3].min():>8.5f} {x[3].max():>8.5f}")
+        print("\nmin/max BEFORE scaling:\n")
+        print(f"u:   {x[0].min():>9.5f} {x[0].max():>9.5f}")
+        print(f"v:   {x[1].min():>9.5f} {x[1].max():>9.5f}")
+        print(f"hpd: {x[2].min():>9.5f} {x[2].max():>9.5f}")
+        print(f"dpy: {x[3].min():>9.5f} {x[3].max():>9.5f}")
 
         x_norm[0,:,:] = 2*(x[0,:,:] - umin)/(umax - umin) - 1
         x_norm[1,:,:] = 2*(x[1,:,:] - vmin)/(vmax - vmin) - 1
@@ -121,11 +119,12 @@ def normalize_dataset(tensors, data_bounds):
         y_norm[3,:,:] = 2*(y[3,:,:] - dpymin)/(dpymax - dpymin) - 1
 
         print("\nmin/max AFTER scaling:\n")
-        print(f"u:   {x_norm[0].min():>8.5f} {x_norm[0].max():>8.5f}")
-        print(f"v:   {x_norm[1].min():>8.5f} {x_norm[1].max():>8.5f}")
-        print(f"hpd: {x_norm[2].min():>8.5f} {x_norm[2].max():>8.5f}")
-        print(f"dpy: {x_norm[3].min():>8.5f} {x_norm[3].max():>8.5f}")
+        print(f"u:   {x_norm[0].min():>9.5f} {x_norm[0].max():>9.5f}")
+        print(f"v:   {x_norm[1].min():>9.5f} {x_norm[1].max():>9.5f}")
+        print(f"hpd: {x_norm[2].min():>9.5f} {x_norm[2].max():>9.5f}")
+        print(f"dpy: {x_norm[3].min():>9.5f} {x_norm[3].max():>9.5f}")
         print("\n")
+        print("---------------------------------------------------------------")
 
     else:
         raise ValueError(f"Expected 4-channel data, but got {x.shape[0]} channels")
