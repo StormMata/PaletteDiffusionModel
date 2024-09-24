@@ -587,3 +587,59 @@ def blob_mask(img_shape, out_channels, dtype='uint8'):
     mask_np = mask_np * out_channels
 
     return mask_np
+
+def smooth_blob(img_shape, out_channels, dtype='uint8'):
+    img_h, img_w = img_shape[:2]
+    total_pixels = img_h * img_w
+    
+    # Set minimum and maximum mask area (5% to 35% of total pixels)
+    min_area = 0.05 * total_pixels  # 5% of the image size
+    max_area = 0.35 * total_pixels  # 35% of the image size
+    
+    # Create a blank mask
+    mask = Image.new('L', (img_w, img_h), 0)
+    draw = ImageDraw.Draw(mask)
+    
+    # Generate a random radius for the blob ensuring the area is within bounds
+    min_radius = int(np.sqrt(min_area / np.pi))  # Radius for minimum area circle
+    max_radius = int(np.sqrt(max_area / np.pi))  # Radius for maximum area circle
+    blob_radius = np.random.randint(min_radius, max_radius)
+    
+    # Randomly place the blob on the image
+    blob_x = np.random.randint(blob_radius, img_w - blob_radius)
+    blob_y = np.random.randint(blob_radius, img_h - blob_radius)
+    
+    # Draw a smooth circle (blob) on the mask
+    draw.ellipse((blob_x - blob_radius, blob_y - blob_radius, blob_x + blob_radius, blob_y + blob_radius), fill=1)
+    
+    # Apply a Gaussian blur to smooth the edges
+    mask = mask.filter(ImageFilter.GaussianBlur(radius=blob_radius * 0.3))  # Adjust the blur radius to smooth edges
+    
+    # Convert to numpy array
+    mask_np = np.array(mask).astype(dtype)
+    
+    # Calculate the current mask area
+    mask_area = np.sum(mask_np > 0)
+    
+    # Ensure mask area is within the required range by resizing if necessary
+    if mask_area < min_area or mask_area > max_area:
+        scale_factor = np.sqrt(min_area / mask_area) if mask_area < min_area else np.sqrt(max_area / mask_area)
+        new_w = int(img_w * scale_factor)
+        new_h = int(img_h * scale_factor)
+        
+        # Resize the mask
+        mask = mask.resize((new_w, new_h), resample=Image.BILINEAR)
+        mask = mask.resize((img_w, img_h), resample=Image.BILINEAR)
+        mask_np = np.array(mask).astype(dtype)
+    
+    # Add an extra dimension for channels
+    mask_np = mask_np[:, :, None]
+    
+    # Repeat the mask to match the number of channels
+    mask_np = np.repeat(mask_np, len(out_channels), axis=2)
+    
+    # Apply mask only where out_channels is 1
+    out_channels = np.array(out_channels).reshape(1, 1, len(out_channels))
+    mask_np = mask_np * out_channels
+
+    return mask_np
