@@ -185,8 +185,8 @@
     "train": { // arguments for basic training
         "n_epoch":               1e8, // max epochs, not limited now
         "n_iter":                1e8, // max interations
-        "val_epoch":              50, // valdation every specified number of epochs
-        "save_checkpoint_epoch":  50,
+        "val_epoch":              5, // valdation every specified number of epochs
+        "save_checkpoint_epoch":  5,
         "log_iter":              1e4, // log every specified number of iterations
         "tensorboard" :        false // tensorboardX enable
     },
