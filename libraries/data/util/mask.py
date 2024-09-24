@@ -591,7 +591,31 @@ def blob_mask(img_shape, out_channels, dtype='uint8'):
 
     return mask_np
 
-def smooth_blob(img_shape, out_channels, dtype='uint8'):
+def circle_mask(img_shape, out_channels, dtype='uint8'):
+    """Generate a circular mask bounded by the image borders.
+
+    The returned mask has the shape of (h, w, c), where c is the number of channels 
+    of the data. The `out_channels` list specifies which channels will have the mask applied.
+    Each element of `out_channels` corresponds to a specific channel: 
+    - '1' indicates that the mask will be applied to that channel.
+    - '0' indicates that the channel will not have a mask.
+
+    For example, with `out_channels=[1, 1, 0, 0]`, the first two channels will have a mask,
+    while the last two channels will remain unmasked.
+
+    Within the masked channels, '1' indicates the hole, and '0' indicates the valid regions.
+
+    We use `uint8` as the default data type for masks, which may differ from other implementations.
+
+    Args:
+        img_shape (tuple[int]): The size of the image, specified as (height, width).
+        out_channels (list[int]): A list specifying which channels to apply the mask to, 
+                                  with '1' for masked channels and '0' for unmasked channels.
+        dtype (str): The data type of the returned masks. Default: 'uint8'.
+
+    Returns:
+        numpy.ndarray: Mask in the shape of (h, w, c), where c is the number of channels.
+    """
     img_h, img_w = img_shape[:2]
     total_pixels = img_h * img_w
     
@@ -647,7 +671,32 @@ def smooth_blob(img_shape, out_channels, dtype='uint8'):
 
     return mask_np
 
-def blob_mask_new(img_shape, out_channels, dtype='uint8'):
+def irregular_new(img_shape, out_channels, dtype='uint8'):
+    """Generate an irregularly shaped mask.
+
+    The returned mask has the shape of (h, w, c), where c is the number of channels 
+    of the data. The `out_channels` list specifies which channels will have the mask applied.
+    Each element of `out_channels` corresponds to a specific channel: 
+    - '1' indicates that the mask will be applied to that channel.
+    - '0' indicates that the channel will not have a mask.
+
+    For example, with `out_channels=[1, 1, 0, 0]`, the first two channels will have a mask,
+    while the last two channels will remain unmasked.
+
+    Within the masked channels, '1' indicates the hole, and '0' indicates the valid regions.
+
+    We use `uint8` as the default data type for masks, which may differ from other implementations.
+
+    Args:
+        img_shape (tuple[int]): The size of the image, specified as (height, width).
+        out_channels (list[int]): A list specifying which channels to apply the mask to, 
+                                  with '1' for masked channels and '0' for unmasked channels.
+        dtype (str): The data type of the returned masks. Default: 'uint8'.
+
+    Returns:
+        numpy.ndarray: Mask in the shape of (h, w, c), where c is the number of channels.
+    """
+
     img_h, img_w = img_shape[:2]
     total_pixels = img_h * img_w
     
@@ -680,7 +729,7 @@ def blob_mask_new(img_shape, out_channels, dtype='uint8'):
         draw.polygon(vertices, fill=1)
         
         # Apply a Gaussian blur to smooth the edges
-        mask = mask.filter(ImageFilter.GaussianBlur(radius=20))  # Larger blur for smoother edges
+        mask = mask.filter(ImageFilter.GaussianBlur(radius=50))  # Larger blur for smoother edges
         
         # Convert to numpy array
         mask_np = np.array(mask).astype(dtype)
