@@ -4,7 +4,7 @@ import math
 # import cv2
 import random
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 def bottom_mask_half(img_shape, dtype='uint8'):
     """Generate mask in ndarray from bbox.
